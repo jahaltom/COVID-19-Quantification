@@ -6,3 +6,8 @@ Replace the Snakefile with the one in this repo so that counts will be output as
 ##Getting started
 
 
+human_tr_gen_decoy.fasta: Human gencode transcripts + the novel EB transcripts + viral decoys + spike-ins + human whole genome. This is used for salmon index
+
+
+
+
