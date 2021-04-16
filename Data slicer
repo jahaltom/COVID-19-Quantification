@@ -1,0 +1,38 @@
+import pandas as pd
+import os
+from os import path
+
+#Import list of SRP and Study Titles.
+title_list = pd.read_csv("ListT",sep='\t')
+#Import TPM file.
+df = pd.read_csv("results_TPM_gene.tsv",sep='\t')
+#Import count file.
+dfc = pd.read_csv("results_Count_gene.tsv",sep='\t')
+
+#Import list of SRP and SRR IDs.
+srr_list = pd.read_csv("List",sep='\t')
+##Create dict that has SRP ID as key.
+d = srr_list.groupby('SRP')['SRR'].apply(list).to_dict()
+
+
+
+
+
+for key in d:
+    #quant will be df of all SRR IDs and their TPM. Each Key is a single SRP ID.
+    quant = df[d[key]]
+    #count will be df of all SRR IDs and their count. Each Key is a single SRP ID.
+    count = dfc[d[key]]
+    #Metadata from TPM file. Same as count.
+    metadata = df[df.columns[0:7]]
+    ##Merge metadata with quant and count
+    result = pd.concat([metadata, quant], axis=1)
+    result_count = pd.concat([metadata, count], axis=1)
+    ##Create a Dir (study title) where the files will be stored.
+    #s = title_list[title_list["SRP"]==key]
+    #title = (s["Title"].to_string(index=False,header=False)).replace(" ", "_")
+    if path.exists(key) is not True:
+        os.mkdir(key)
+    ##Write
+    result.to_csv(key +'/'+ key + ".TPM.tsv",sep='\t',index=False)
+    result_count.to_csv(key +'/'+ key + ".Count.tsv",sep='\t',index=False)
