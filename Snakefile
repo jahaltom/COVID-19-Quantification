@@ -77,19 +77,20 @@ rule merge:
 
                 #add gene metadata
                 md=pd.read_csv('metadata.tsv',sep='\t',skiprows=0)
-                rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
+                md.rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
                 md['TranscriptID']=md['TranscriptID'].str.split('.').str[0]
-
-                df_gene=md.merge(df_gene, on=['TranscriptID'], how='right')
-                del df_gene["TranscriptID"]
-                ##Add to counts df too
-                df_gene_count=md.merge(df_gene_count, on=['TranscriptID'], how='right')
-                del df_gene_count["TranscriptID"]
-
+                md2=md[['Gene_name','TranscriptID']]
+                
+                #Add Gene Name
+                df_gene=md2.merge(df_gene, on=['TranscriptID'], how='right')                       
+                df_gene_count=md2.merge(df_gene_count, on=['TranscriptID'], how='right')
+             
                 df_gene = df_gene.groupby(['Gene_name'],as_index = False).sum()
                 df_gene_count = df_gene_count.groupby(['Gene_name'],as_index = False).sum()
-
-
+                
+                  
+                df_gene=md.merge(df_gene, on=['Gene_name'], how='right')
+                df_gene_count=md.merge(df_gene_count, on=['Gene_name'], how='right')
 
                 #reorder
                 df_gene = df_gene[ ['Gene_name'] + [ col for col in df_gene.columns if col != 'Gene_name' ] ]
