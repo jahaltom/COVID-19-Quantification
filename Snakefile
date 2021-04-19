@@ -23,13 +23,7 @@ salmon=quant.Salmon(index="human_data/salmon_index",transcriptome=Tr,threads=15)
 rule all:
 	input:
 		expand("{wd}/results_TPM_tx.tsv",wd=DIR)
-rule quant:
-	output:
-		quant_file="{wd}/{sample}/salmon_out/quant.sf"
-	run:
-		outfile=str(output.quant_file)
-		srrid=outfile.split("/")[1]
-		sra.SRA(srrid,directory=DIR).quant(salmon).delete_fastq()
+
 
 rule merge:
 	input:
@@ -77,15 +71,15 @@ rule merge:
 		
 		#Metadata TPMs
 		df_gene=df[['TranscriptID']+names].copy()
-		df_gene['TranscriptID']=df_gene['TranscriptID'].str.split('.').str[0]
+	
         
         	df_gene_count=dfcount[['TranscriptID']+names].copy()
-		df_gene_count['TranscriptID']=df_gene_count['TranscriptID'].str.split('.').str[0]
+		
         
         	#add gene names
         	md=pd.read_csv('meta_data.tsv',sep='\t',skiprows=0) 
-        	rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
-        	md['TranscriptID']=md['TranscriptID'].str.split('.').str[0]
+        	md.rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
+        	
 		md2=md[['TranscriptID','Gene_stable_ID']]
 		df_gene=md2.merge(df_gene, on=['TranscriptID'], how='right')       	
         	##Add to counts df too
@@ -93,11 +87,12 @@ rule merge:
 		
 		df_gene = df_gene.groupby(['Gene_stable_ID'],as_index = False).sum()
         	df_gene_count = df_gene_count.groupby(['Gene_stable_ID'],as_index = False).sum()
-        
 		
-        
-        	
-        
+        	del md['TranscriptID']
+       		md=md.drop_duplicates()
+
+     		
+		
         	df_gene=md.merge(df_gene, on=['Gene_stable_ID'], how='right')
         	
         	##Add to counts df too
