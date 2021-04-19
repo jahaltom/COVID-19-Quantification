@@ -1,6 +1,6 @@
 
 Get sars metsdata:
-cat Ens_gene_metadata.txt  | grep "ENSSAST" | awk 'BEGIN{FS="\t";OFS="\t"}{print $1,$5,$1,$2,$3,$4,$7 }' > Sars
+cat Ens_gene_metadata.txt  | grep "ENSSAST" | awk 'BEGIN{FS="\t";OFS="\t"}{print $1".1",$5,$1,$2,$3,$4,$7 }' > Sars
 rm Ens_gene_metadata.txt
 
 EB genes and gencode transcripts
