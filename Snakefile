@@ -65,7 +65,7 @@ rule merge:
             		counts=pd.read_csv(qf,sep='\t',usecols=[4],skiprows=0)
             		##Add TPM and counts to respective df with current SRR id as column name
 			df[name]=thisdata['TPM']
-            		dfcount[name]=counts['Count']
+            		dfcount[name]=counts['NumReads']
 
         	#transcript TPMs. 
 		df_tx=df[['TranscriptID']+names].copy()
@@ -73,28 +73,38 @@ rule merge:
 		df_tx.to_csv(output.outfile,sep='\t',index=False)
         
               
-        	#Metadata TPMs
+        	
+		
+		#Metadata TPMs
 		df_gene=df[['TranscriptID']+names].copy()
 		df_gene['TranscriptID']=df_gene['TranscriptID'].str.split('.').str[0]
         
         	df_gene_count=dfcount[['TranscriptID']+names].copy()
 		df_gene_count['TranscriptID']=df_gene_count['TranscriptID'].str.split('.').str[0]
         
-        
-        	#add gene metadata
+        	#add gene names
         	md=pd.read_csv('meta_data.tsv',sep='\t',skiprows=0) 
         	rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
         	md['TranscriptID']=md['TranscriptID'].str.split('.').str[0]
-        
-        	df_gene=md.merge(df_gene, on=['TranscriptID'], how='right')
-        	del df_gene["TranscriptID"]
+		md2=md[['TranscriptID','Gene_stable_ID']]
+		df_gene=md2.merge(df_gene, on=['TranscriptID'], how='right')       	
         	##Add to counts df too
-        	df_gene_count=md.merge(df_gene_count, on=['TranscriptID'], how='right')
-        	del df_gene_count["TranscriptID"]
+        	df_gene_count=md2.merge(df_gene_count, on=['TranscriptID'], how='right')
+		
+		df_gene = df_gene.groupby(['Gene_stable_ID'],as_index = False).sum()
+        	df_gene_count = df_gene_count.groupby(['Gene_stable_ID'],as_index = False).sum()
         
-        	df_gene = df_gene.groupby(['Gene_name'],as_index = False).sum()
-        	df_gene_count = df_gene_count.groupby(['Gene_name'],as_index = False).sum()
+		
         
+        	
+        
+        	df_gene=md.merge(df_gene, on=['Gene_stable_ID'], how='right')
+        	
+        	##Add to counts df too
+        	df_gene_count=md.merge(df_gene_count, on=['Gene_stable_ID'], how='right')
+        
+        
+        	
         
         
 		#reorder	
