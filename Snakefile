@@ -23,7 +23,13 @@ salmon=quant.Salmon(index="human_data/salmon_index",transcriptome=Tr,threads=15)
 rule all:
 	input:
 		expand("{wd}/results_TPM_tx.tsv",wd=DIR)
-
+rule quant:
+	output:
+		quant_file="{wd}/{sample}/salmon_out/quant.sf"
+	run:
+		outfile=str(output.quant_file)
+		srrid=outfile.split("/")[1]
+		sra.SRA(srrid,directory=DIR).quant(salmon).delete_fastq()
 
 rule merge:
 	input:
