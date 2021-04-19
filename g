@@ -1,13 +1,15 @@
-##Extract EB genes
-cat human_tr_gen_decoy.fasta | grep ">" | grep "gene=EB." |  awk 'BEGIN{OFS="\t"}{print $1,$2,"NA",$NF,"NA","NA","EB"}'  | sed 's/>//g' | sed 's/gene=//g' > EB
-rm human_tr_gen_decoy.fasta
 
 Get sars metsdata:
 cat Ens_gene_metadata.txt  | grep "ENSSAST" | awk 'BEGIN{FS="\t";OFS="\t"}{print $1,$5,$1,$2,$3,$4,$7 }' > Sars
 rm Ens_gene_metadata.txt
 
-cat gencode_tx_metadata.tsv | awk 'BEGIN{FS="\t";OFS="\t"}{print $1,$17,$19,$20,$4,$7,$18}' > head
+EB genes and gencode transcripts
+cat EB_Gencode_gene_metadata_ordered_withPS.tsv | awk 'BEGIN{FS="\t";OFS="\t"}{print $1,$16,$17,$20,$3,$6,$18}' > head
+rm EB_Gencode_gene_metadata_ordered_withPS.tsv
 
+
+cat head Sars  > meta_data.tsv
+rm  Sars head
 
 
 
