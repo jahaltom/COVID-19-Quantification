@@ -14,10 +14,6 @@ srr_list = pd.read_csv("List",sep='\t')
 ##Create dict that has SRP ID as key.
 d = srr_list.groupby('SRP')['SRR'].apply(list).to_dict()
 
-
-
-
-
 for key in d:
     #quant will be df of all SRR IDs and their TPM. Each Key is a single SRP ID.
     quant = df[d[key]]
@@ -34,5 +30,53 @@ for key in d:
     if path.exists(key) is not True:
         os.mkdir(key)
     ##Write
-    result.to_csv(key +'/'+ key + ".TPM.tsv",sep='\t',index=False)
-    result_count.to_csv(key +'/'+ key + ".Count.tsv",sep='\t',index=False)
+    
+    
+    
+    
+    
+    
+   #create a median column
+result['median']=result.median(axis=1)
+#remove all unexpressed tx with med < 1
+result=result.loc[result['median'] >=1 ]
+#calculate medians of median tx tpm dist for protein_coding and lncRNA
+med_med_pc=df.loc[result['Gene_type'] == 'protein_coding']['median'].median()
+med_med_lnc=df.loc[result['Gene_type'] == 'lncRNA']['median'].median()
+med_med_eb=df.loc[result['Gene_type'] == 'EB_novel']['median'].median()
+#strict
+res_pc=df.loc[((result['Gene_type'] == 'EB_novel') & (result['median'] < med_med_pc)) ]
+
+                    
+indexNames = result[ (result['Gene_type'] == 'EB_novel') & (result['median'] < med_med_pc) ].index
+result.drop(indexNames , inplace=True)
+
+
+
+result_count['median']=result_count.median(axis=1)
+#remove all unexpressed tx with med < 1
+result_count=result.loc[result_count['median'] >=1 ]
+#calculate medians of median tx tpm dist for protein_coding and lncRNA
+med_med_pc=df.loc[result_count['Gene_type'] == 'protein_coding']['median'].median()
+med_med_lnc=df.loc[result_count['Gene_type'] == 'lncRNA']['median'].median()
+med_med_eb=df.loc[result_count['Gene_type'] == 'EB_novel']['median'].median()
+#strict
+res_pc=df.loc[((result_count['Gene_type'] == 'EB_novel') & (result_count['median'] < med_med_pc)) ]
+
+                    
+indexNames = result[ (result['Gene_type'] == 'EB_novel') & (result['median'] < med_med_pc) ].index
+result.drop(indexNames , inplace=True)
+
+indexNames = result_count[ (result_count['Gene_type'] == 'EB_novel') & (result_count['median'] < med_med_pc) ].index
+result_count.drop(indexNames , inplace=True)
+
+
+
+
+
+
+
+
+
+result.to_csv(key +'/'+ key + ".TPM.tsv",sep='\t',index=False)
+result_count.to_csv(key +'/'+ key + ".Count.tsv",sep='\t',index=False)
