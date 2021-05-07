@@ -37,7 +37,7 @@ rule quant:
         	picard=Runnable(command='picard')   
         	param={'SamToFastq':'','I=': bam ,'F=': fq1,'F2=': fq2}
         	picard.run(**param)                  
-        	sra.SRA(fastq=fq1,fastq2=fq2).quant(salmon).delete_fastq()		
+        	sra.SRA(fastq=fq1,fastq2=fq2,directory=DIR).quant(salmon).delete_fastq()		
 		
 		
 		
