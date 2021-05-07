@@ -41,7 +41,7 @@ rule quant:
 		
 		
 		
-		sra.SRA(srrid,directory=DIR).quant(salmon).delete_fastq()
+		
 
 rule merge:
 	input:
