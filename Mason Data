@@ -31,14 +31,15 @@ rule quant:
                 outfile=str(output.quant_file)
                 srrid=outfile.split("/")[1]
                 bam="/ocean/projects/mcb200036p/shared/02-AlignedData/" + srrid + "/"  + srrid + "_Aligned.sortedByCoord_sorted.out.bam"
-                path=DIR + "/" + srrid+ "/"
-                fq1=path + srrid + '1.fastq'
-                fq2=path + srrid + '2.fastq'
-                picard=Runnable(command='picard')
-                param={'SamToFastq':'','I=': bam ,'F=': fq1,'F2=': fq2}
-                picard.run(**param)
-
-                sra.SRA(fastq=fq1,fastq2=fq2,directory=path).quant(salmon).delete_fastq()
+                b = os.path.getsize(bam)
+                if b > 0:
+                        path=DIR + "/" + srrid+ "/"
+                        fq1=path + srrid + '1.fastq'
+                        fq2=path + srrid + '2.fastq'
+                        picard=Runnable(command='picard')
+                        param={'SamToFastq':'','I=': bam ,'F=': fq1,'F2=': fq2}
+                        picard.run(**param)
+                        sra.SRA(fastq=fq1,fastq2=fq2,directory=path).quant(salmon).delete_fastq()
 
 rule merge:
         input:
