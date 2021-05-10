@@ -28,17 +28,25 @@ rule quant:
         output:
                 quant_file="{wd}/{sample}/salmon_out/quant.sf"
         run:
+                # Path to quant file
                 outfile=str(output.quant_file)
+                # get sample name {sample}
                 srrid=outfile.split("/")[1]
+                # Get path to bam file
                 bam="/ocean/projects/mcb200036p/shared/02-AlignedData/" + srrid + "/"  + srrid + "_Aligned.sortedByCoord_sorted.out.bam"
+                # Make sure bam file size is > 0
                 b = os.path.getsize(bam)
                 if b > 0:
+                        #Pathway for fastq files and salmon output 
                         path=DIR + "/" + srrid+ "/"
+                        #Fastq file names and path. 
                         fq1=path + srrid + '1.fastq'
                         fq2=path + srrid + '2.fastq'
+                        #Run picard to convert bam to fastq
                         picard=Runnable(command='picard')
                         param={'SamToFastq':'','I=': bam ,'F=': fq1,'F2=': fq2}
                         picard.run(**param)
+                        #Run Salmon on sra object(fastq files) and delete fastq when finished.  
                         sra.SRA(fastq=fq1,fastq2=fq2,directory=path).quant(salmon).delete_fastq()
 
 rule merge:
