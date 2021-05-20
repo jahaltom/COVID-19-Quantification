@@ -22,7 +22,7 @@ for key in d:
     #count will be df of all SRR IDs and their count. Each Key is a single SRP ID.
     count = dfc[d[key]]
     #Metadata from TPM file. Same as count.
-    metadata = df[df.columns[0:7]]
+    metadata = df[df.columns[0:6]]
     ##Merge metadata with quant and count
     result = pd.concat([metadata, quant], axis=1)
     result_count = pd.concat([metadata, count], axis=1)
