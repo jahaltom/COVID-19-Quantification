@@ -2,17 +2,19 @@ import pandas as pd
 import os
 from os import path
 
-#Import list of SRP and Study Titles.
-title_list = pd.read_csv("ListT",sep='\t')
+
 #Import TPM file.
 df = pd.read_csv("results_TPM_gene.tsv",sep='\t')
 #Import count file.
 dfc = pd.read_csv("results_Count_gene.tsv",sep='\t')
 
 #Import list of SRP and SRR IDs.
-srr_list = pd.read_csv("List",sep='\t')
+srr_list = pd.read_csv("list",sep='\t')
 ##Create dict that has SRP ID as key.
 d = srr_list.groupby('SRP')['SRR'].apply(list).to_dict()
+
+##Will be sed to get all genes that pass TPM filter. 
+genes=[]
 
 for key in d:
     #quant will be df of all SRR IDs and their TPM. Each Key is a single SRP ID.
@@ -24,59 +26,29 @@ for key in d:
     ##Merge metadata with quant and count
     result = pd.concat([metadata, quant], axis=1)
     result_count = pd.concat([metadata, count], axis=1)
-    ##Create a Dir (study title) where the files will be stored.
-    #s = title_list[title_list["SRP"]==key]
-    #title = (s["Title"].to_string(index=False,header=False)).replace(" ", "_")
     if path.exists(key) is not True:
         os.mkdir(key)
-    ##Write
     
+    #create a median column
+    result['median']=result.median(axis=1)
+
+    indexNames = result[ (result['median'] < 1) & (result['chr'] != 'SARSCOV2_ASM985889v3') ].index
+    result.drop(indexNames , inplace=True)
+
+    #calculate medians of median tx tpm dist for protein_coding and lncRNA
+    med_med_pc=result.loc[result['Gene_type'] == 'protein_coding']['median'].median()
+    med_med_lnc=result.loc[result['Gene_type'] == 'lncRNA']['median'].median()
+    med_med_eb=result.loc[result['Gene_type'] == 'EB_novel']['median'].median()
+
+    indexNames = result[(result['Gene_type'] == 'EB_novel') & (result['median'] < med_med_lnc) ].index
+    result.drop(indexNames , inplace=True)
+
+    result.to_csv(key +'/'+ key + ".TPM.tsv",sep='\t',index=False)
+    result_count.to_csv(key +'/'+ key + ".Count.tsv",sep='\t',index=False)
+    ##Append genes to list
+    genes.append(result['Gene_stable_ID'])
+print(genes)
     
-    
-    
-    
-    
-   #create a median column
-result['median']=result.median(axis=1)
-#remove all unexpressed tx with med < 1
-result=result.loc[result['median'] >=1 ]
-#calculate medians of median tx tpm dist for protein_coding and lncRNA
-med_med_pc=df.loc[result['Gene_type'] == 'protein_coding']['median'].median()
-med_med_lnc=df.loc[result['Gene_type'] == 'lncRNA']['median'].median()
-med_med_eb=df.loc[result['Gene_type'] == 'EB_novel']['median'].median()
-#strict
-res_pc=df.loc[((result['Gene_type'] == 'EB_novel') & (result['median'] < med_med_pc)) ]
-
-                    
-indexNames = result[ (result['Gene_type'] == 'EB_novel') & (result['median'] < med_med_pc) ].index
-result.drop(indexNames , inplace=True)
 
 
 
-result_count['median']=result_count.median(axis=1)
-#remove all unexpressed tx with med < 1
-result_count=result.loc[result_count['median'] >=1 ]
-#calculate medians of median tx tpm dist for protein_coding and lncRNA
-med_med_pc=df.loc[result_count['Gene_type'] == 'protein_coding']['median'].median()
-med_med_lnc=df.loc[result_count['Gene_type'] == 'lncRNA']['median'].median()
-med_med_eb=df.loc[result_count['Gene_type'] == 'EB_novel']['median'].median()
-#strict
-res_pc=df.loc[((result_count['Gene_type'] == 'EB_novel') & (result_count['median'] < med_med_pc)) ]
-
-                    
-indexNames = result[ (result['Gene_type'] == 'EB_novel') & (result['median'] < med_med_pc) ].index
-result.drop(indexNames , inplace=True)
-
-indexNames = result_count[ (result_count['Gene_type'] == 'EB_novel') & (result_count['median'] < med_med_pc) ].index
-result_count.drop(indexNames , inplace=True)
-
-
-
-
-
-
-
-
-
-result.to_csv(key +'/'+ key + ".TPM.tsv",sep='\t',index=False)
-result_count.to_csv(key +'/'+ key + ".Count.tsv",sep='\t',index=False)
