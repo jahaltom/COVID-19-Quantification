@@ -10,7 +10,7 @@ df = pd.read_csv("results_TPM_gene.tsv",sep='\t')
 dfc = pd.read_csv("results_Count_gene.tsv",sep='\t')
 
 #Import list of SRP and SRR IDs.
-srr_list = pd.read_csv("list",sep='\t')
+srr_list = pd.read_csv("List",sep='\t')
 ##Create dict that has SRP ID as key.
 d = srr_list.groupby('SRP')['SRR'].apply(list).to_dict()
 
@@ -58,5 +58,5 @@ genes.columns=['Gene_stable_ID']
 
 
 
-gene.to_csv("done.metadata",mode='w', header=True,index=False)
+genes.to_csv("GeneList",mode='w', header=True,index=False)
 
