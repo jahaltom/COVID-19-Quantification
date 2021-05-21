@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas import DataFrame
 import os
 from os import path
 
@@ -47,8 +48,15 @@ for key in d:
     result_count.to_csv(key +'/'+ key + ".Count.tsv",sep='\t',index=False)
     ##Append genes to list
     genes.append(result['Gene_stable_ID'])
-print(genes)
+
     
 
+genes = pd.concat(genes,ignore_index=True)
+genes = genes.drop_duplicates()
+genes = DataFrame(genes)
+genes.columns=['Gene_stable_ID']
 
+
+
+gene.to_csv("done.metadata",mode='w', header=True,index=False)
 
