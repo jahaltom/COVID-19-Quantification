@@ -59,4 +59,4 @@ genes.columns=['Gene_stable_ID']
 
 
 genes.to_csv("GeneList",mode='w', header=True,index=False)
-
+##raw = pd.read_csv("GeneList") and TPM frame...
