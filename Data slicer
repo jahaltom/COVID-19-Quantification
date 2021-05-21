@@ -60,3 +60,5 @@ genes.columns=['Gene_stable_ID']
 
 genes.to_csv("GeneList",mode='w', header=True,index=False)
 ##raw = pd.read_csv("GeneList") and TPM frame...
+##done = pd.merge(df,raw,on=['Gene_stable_ID'])
+##done.to_csv("results_TPM_gene.All.tsv",mode='w', header=True,index=False)
