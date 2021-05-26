@@ -13,9 +13,9 @@ Tr=config['transcriptome']
 
 
 
-#####Read SRR ids######
-with open ("SRRids.txt") as f:
-	SRR=f.read().splitlines()
+#####Read in run_accession ids######
+with open ("RAids.txt") as f:
+        ra_ids=f.read().splitlines()
 
 #create salmon object. If index is not present it will be created
 salmon=quant.Salmon(index="human_data/salmon_index",transcriptome=Tr,threads=15)
@@ -36,7 +36,7 @@ rule quant:
 
 rule merge:
 	input:
-		["{wd}/{sample}/salmon_out/quant.sf".format(wd=DIR,sample=s) for s in SRR]
+		["{wd}/{sample}/salmon_out/quant.sf".format(wd=DIR,sample=s) for s in ra_ids]
 	output:
 		outfile="{wd}/results_TPM_tx.tsv"
 	run:
@@ -53,25 +53,25 @@ rule merge:
 			thistx=l.split('\t')[0]                    
 			txids.append(thistx)
 		##For TPM	
-		df=pd.DataFrame({'TranscriptID':txids})
+		dftpm=pd.DataFrame({'TranscriptID':txids})
         	##Make a copy for the counts
         	dfcount=pd.DataFrame({'TranscriptID':txids})
 		#read files in memory
 		for qf in input:
-            		##current filename(SRRid)
+            		##current filename(RAid)
 			name=qf.split('/')[1]
-            		##Will become list of all SRRids
+            		##Will become list of all RAids
 			names.append(name)
             		##Get TPM
 			thisdata=pd.read_csv(qf,sep='\t',usecols=[3],skiprows=0)
             		##Get Counts
             		counts=pd.read_csv(qf,sep='\t',usecols=[4],skiprows=0)
             		##Add TPM and counts to respective df with current Run accession ID as column name
-			df[name]=thisdata['TPM']
+			dftpm[name]=thisdata['TPM']
             		dfcount[name]=counts['NumReads']
 
         	#transcript TPMs. 
-		df_tx=df[['TranscriptID']+names].copy()
+		df_tx=dftpm[['TranscriptID']+names].copy()
 		#write to file
 		df_tx.to_csv(output.outfile,sep='\t',index=False)
         
@@ -80,7 +80,7 @@ rule merge:
 		###Collapse transcript to respective gene names sum counts and TPMs
 		
 		#Gather counts and TPMs for each transcript
-		df_gene=df[['TranscriptID']+names].copy()	
+		df_gene_tpm=dftpm[['TranscriptID']+names].copy()	
         	df_gene_count=dfcount[['TranscriptID']+names].copy()
 		
         
@@ -91,11 +91,11 @@ rule merge:
 		#Make df with transcript id and corresponding gene id
 		md2=md[['TranscriptID','Gene_stable_ID']]
 		##Merge TPM and count data by TranscriptID
-		df_gene=md2.merge(df_gene, on=['TranscriptID'], how='right')       	      
+		df_gene_tpm=md2.merge(df_gene_tpm, on=['TranscriptID'], how='right')       	      
         	df_gene_count=md2.merge(df_gene_count, on=['TranscriptID'], how='right')
 		
 		#Collapse so that each gene id is listed once. sum up corresponding transcript TPM and counts.
-		df_gene = df_gene.groupby(['Gene_stable_ID'],as_index = False).sum()
+		df_gene_tpm = df_gene_tpm.groupby(['Gene_stable_ID'],as_index = False).sum()
         	df_gene_count = df_gene_count.groupby(['Gene_stable_ID'],as_index = False).sum()
 		
 		#Format metadata to have each gene ID once
@@ -104,18 +104,14 @@ rule merge:
 
      		
 		##Merge metadata to counts and TPM
-        	df_gene=md.merge(df_gene, on=['Gene_stable_ID'], how='right')        	    	
+        	df_gene_tpm=md.merge(df_gene_tpm, on=['Gene_stable_ID'], how='right')        	    	
         	df_gene_count=md.merge(df_gene_count, on=['Gene_stable_ID'], how='right')
-        
-        
-        	
-        
-        
+    
 		#reorder so gene name is first.	
-        	df_gene = df_gene[ ['Gene_name'] + [ col for col in df_gene.columns if col != 'Gene_name' ] ]
+        	df_gene_tpm = df_gene_tpm[ ['Gene_name'] + [ col for col in df_gene_tpm.columns if col != 'Gene_name' ] ]
         	df_gene_count = df_gene_count[ ['Gene_name'] + [ col for col in df_gene_count.columns if col != 'Gene_name' ] ]
 		
 		
 		
-		df_gene.to_csv(DIR+'/results_TPM_gene.tsv',sep='\t',index=False)        
+		df_gene_tpm.to_csv(DIR+'/results_TPM_gene.tsv',sep='\t',index=False)        
         	df_gene_count.to_csv(DIR+'/results_Count_gene.tsv',sep='\t',index=False)
