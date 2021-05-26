@@ -15,8 +15,11 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
 
 ## Snakefiles and filters
 * SRA_Data: This code takes in run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human transcriptome as well as SARs and Human EB genes. Outputs TPM and counts. 
-* SRA_Data_Filter:This takes output from Snakefile(results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts by study. Additionaly, the TPM is filtered by removing those protein coding and EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. A file called "List" that contans the study_accession IDs and their corrisponding run_accession IDs is alos needed. 
+
+* SRA_Data_Filter:This takes output from Snakefile(results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts by study. Additionaly, the TPM is filtered by removing those protein coding and EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. A file called "List" that contans the study_accession IDs and their corrisponding run_accession IDs is alos needed.
+ 
 * Mason_Data: Takes bam files from Mason Covid study and converts to fastq, then it will quantify the expression on Human transcriptome as well as SARs and Human EB genes. Outputs TPM and counts.
+
 * Mason_Data_Filter: This takes output from Mason Data(results_TPM_gene.tsv) and filters teh TPM by removing those protein coding and EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. 
 
 ## Metadata
