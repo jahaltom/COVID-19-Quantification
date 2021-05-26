@@ -13,6 +13,7 @@ This pipeline will take transcriptome data and quantify the expression on Human 
 ## Parameters
 The salmon tool parameters are specified in the params directory(needed by pyrpipe). To modify the parameters edit salmon_index.yaml. pyrpipe parameters are specified in the pyrpipe_conf.yaml file. config.yaml contains important parameters for the Snakefiles(SRA_Data and Mason_Data). 
 
+
 ## Snakefiles and filters
 * SRA_Data: This code takes in run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human transcriptome as well as SARs and Human EB genes. Outputs TPM and counts. 
 
@@ -22,13 +23,15 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
 
 * Mason_Data_Filter: This takes output from Mason Data(results_TPM_gene.tsv) and filters teh TPM by removing those protein coding and EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. 
 
+
 ## Metadata
 * meta_data.tsv.gz: A metadata file for Human and SARs genes, as well as the EB genes used in this study. 
 
 
-
 ## Execution 
 snakemake -j 50 -s snakefile --cluster "sbatch -t 01:00:00 -c 60"
+
+
 
 This code is a modified version of urmi-21's code: https://github.com/urmi-21/covid-quantification.git
 
