@@ -1,0 +1,18 @@
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' EB_Gencode_pep_NODOTS.fasta | sed 'N;s/\n/ /' | perl -p -i -e 's/ /\t/g' | grep "|ENSG0" > human
+cat human | sed 's/|/ /g' | awk 'BEGIN {OFS = "\t"}{print $3,$NF}' > Human
+rm human
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' EB_Gencode_pep_NODOTS.fasta | sed 'N;s/\n/ /' | perl -p -i -e 's/ /\t/g' | grep -v "|ENSG0" > EB
+
+
+
+import pandas as pd
+
+
+strata_md=pd.read_csv("gene_level_metadata.tsv",sep='\t')
+md=pd.read_csv("meta_data.tsv",sep='\t')
+
+md = md.drop(['Gene_stable_ID', 'Gene_description', 'chr', 'strand',], axis=1)
+
+md = md.merge(strata_md, on=['Gene_name'], how='right')
+
+md.to_csv('done.tsv',sep='\t',index=False)        
