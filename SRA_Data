@@ -69,9 +69,9 @@ rule merge:
             		##Add TPM and counts to respective df with current Run accession ID as column name
 			dftpm[name]=thisdata['TPM']
             		dfcount[name]=counts['NumReads']
-
-        	tx_md=pd.read_csv('Transcript_level_metadata.tsv',sep='\t',skiprows=0) 		
+			
         	#transcript TPMs. 
+		tx_md=pd.read_csv('Transcript_level_metadata.tsv',sep='\t',skiprows=0)
 		df_tx=dftpm[['TranscriptID']+names].copy()
 		df_tx = df_tx.merge(tx_md, on=['TranscriptID'])
         
@@ -85,7 +85,7 @@ rule merge:
 		
         
         	#Read in gene metadata
-        	md=pd.read_csv('Gene_level_metadata.tsv',sep='\t',skiprows=0) 
+       	 	md=pd.read_csv('Gene_level_metadata.tsv',sep='\t',skiprows=0) 
         	md.rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
         	
 		#Make df with transcript id and corresponding gene id
