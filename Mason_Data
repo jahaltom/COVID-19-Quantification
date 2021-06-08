@@ -82,10 +82,10 @@ rule merge:
 			dftpm[name]=thisdata['TPM']
             		dfcount[name]=counts['NumReads']
 
+        	tx_md=pd.read_csv('Transcript_level_metadata.tsv',sep='\t',skiprows=0) 		
         	#transcript TPMs. 
 		df_tx=dftpm[['TranscriptID']+names].copy()
-		#write to file
-		df_tx.to_csv(output.outfile,sep='\t',index=False)
+		df_tx = df_tx.merge(tx_md, on=['TranscriptID'])
         
               
         	
