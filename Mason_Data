@@ -97,7 +97,7 @@ rule merge:
 		
         
         	#Read in gene metadata
-        	md=pd.read_csv('meta_data.tsv',sep='\t',skiprows=0) 
+        	md=pd.read_csv('Gene_level_metadata.tsv',sep='\t',skiprows=0) 
         	md.rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
         	
 		#Make df with transcript id and corresponding gene id
@@ -111,8 +111,8 @@ rule merge:
         	df_gene_count = df_gene_count.groupby(['Gene_stable_ID'],as_index = False).sum()
 		
 		#Format metadata to have each gene ID once
-        	del md['TranscriptID']
-       		md=md.drop_duplicates()
+        	
+       	
 
      		
 		##Merge metadata to counts and TPM
