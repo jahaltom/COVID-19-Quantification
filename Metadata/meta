@@ -7,6 +7,8 @@ eb.columns =['TranscriptID', 'seq']
 human=pd.read_csv("Human",sep='\t',header=None)
 human.columns =['TranscriptID', 'seq']
 tx=pd.read_csv("transcript_level_metadata.tsv",sep='\t')
+tx.rename(columns={'tid': 'TranscriptID'}, inplace=True)
+
 
 #Get those transcripts where there was no protein coded for
 nc_tx= tx[tx['final_strata'].isnull()]
