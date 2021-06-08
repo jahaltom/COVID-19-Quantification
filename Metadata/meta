@@ -8,31 +8,32 @@ import pandas as pd
 
 #####################Gene Level
 
-#Read in metadata
+#Read in metadata from phylostrata. Each gene is represented by 1 line, transcripts are merged. So another file that has each transcript represented as a single line is needed. 
 strata_md=pd.read_csv("gene_level_metadata.tsv",sep='\t')
 md=pd.read_csv("meta_data.tsv",sep='\t')
-#
+#Unwanted columns
+md = md.drop(['Gene_name', 'strand','Gene_description'], axis=1)
+#Extract SARS transcripts
 sarsmd=md[md['Gene_stable_ID'].str.contains('ENSSAST')]
+#Remove SARS transcripts. Only Gencode 36 and EB genes have phylostrata. 
 md=md[~md['Gene_stable_ID'].str.contains('ENSSAST')]
-
-
-
+#Change EB Gene_stable_ID to match the current version. 
 md['Gene_stable_ID'] = md['Gene_stable_ID'].str.replace("mikado", "EB")
 
-md = md.drop(['Gene_name', 'strand','Gene_description'], axis=1)
+
+#Merge two metadatas together to add phylostrata info to other. 
 md = md.merge(strata_md, on=['Gene_stable_ID','chr'])
-list=[]
-list.append(md)
-list.append(sarsmd)
-md= pd.concat(list)
 
-
-md.to_csv('Gene_level_metadata.tsv',sep='\t',index=False)        
+#Merge and write
+gene_md=[md,sarsmd]
+gene_md= pd.concat(gene_md)
+##Once the snakefile is fun, this file will be compressed to the gene level##
+gene_md.to_csv('Gene_level_metadata.tsv',sep='\t',index=False)        
 
 
 
 #################Transcript level
-##Read in EB genes, gencode genes, and transcript metadata. Rename gene file columns
+##Read in protein seq's for Human EB gene and gencode gene transcripts, and transcript phylostrata metadata. Rename some file columns for later. 
 eb=pd.read_csv("EB",sep='\t',header=None)
 eb.columns =['TranscriptID', 'seq']
 human=pd.read_csv("Human",sep='\t',header=None)
@@ -43,12 +44,11 @@ tx.rename(columns={'tid': 'TranscriptID'}, inplace=True)
 
 #Get those transcripts where there was no protein coded for
 nc_tx= tx[tx['final_strata'].isnull()]
-#Merge with EB
+#Merge metadata with EB
 eb_tx = tx.merge(eb, on=['TranscriptID'])
 #Merge with Gencode
 human_tx = tx.merge(human, on=['TranscriptID'])
-#Combine
-frames=[eb_tx,human_tx,nc_tx,sarsmd]
-frames = pd.concat(frames)
-
-frames.to_csv("Transcript_level_metadata.tsv",mode='w', header=True,index=False,sep='\t')
+#Merge and write
+tx_md=[eb_tx,human_tx,nc_tx,sarsmd]
+tx_md = pd.concat(frames)
+tx_md.to_csv("Transcript_level_metadata.tsv",mode='w', header=True,index=False,sep='\t')
