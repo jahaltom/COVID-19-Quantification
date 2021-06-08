@@ -1,11 +1,6 @@
 import pandas as pd
 
 
-
-
-
-
-
 #####################Gene Level
 
 #Read in metadata from phylostrata. Each gene is represented by 1 line, transcripts are merged. So another file that has each transcript represented as a single line is needed. 
