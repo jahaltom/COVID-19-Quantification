@@ -1,26 +1,6 @@
 import pandas as pd
 
-#################Transcript level
-##Read in EB genes, gencode genes, and transcript metadata. Rename gene file columns
-eb=pd.read_csv("EB",sep='\t',header=None)
-eb.columns =['TranscriptID', 'seq']
-human=pd.read_csv("Human",sep='\t',header=None)
-human.columns =['TranscriptID', 'seq']
-tx=pd.read_csv("transcript_level_metadata.tsv",sep='\t')
-tx.rename(columns={'tid': 'TranscriptID'}, inplace=True)
 
-
-#Get those transcripts where there was no protein coded for
-nc_tx= tx[tx['final_strata'].isnull()]
-#Merge with EB
-eb_tx = tx.merge(eb, on=['TranscriptID'])
-#Merge with Gencode
-human_tx = tx.merge(human, on=['TranscriptID'])
-#Combine
-frames=[eb_tx,human_tx,nc_tx]
-frames = pd.concat(frames)
-
-frames.to_csv("Transcript_level_metadata.tsv",mode='w', header=True,index=False,sep='\t')
 
 
 
@@ -48,3 +28,27 @@ md= pd.concat(list)
 
 
 md.to_csv('Gene_level_metadata.tsv',sep='\t',index=False)        
+
+
+
+#################Transcript level
+##Read in EB genes, gencode genes, and transcript metadata. Rename gene file columns
+eb=pd.read_csv("EB",sep='\t',header=None)
+eb.columns =['TranscriptID', 'seq']
+human=pd.read_csv("Human",sep='\t',header=None)
+human.columns =['TranscriptID', 'seq']
+tx=pd.read_csv("transcript_level_metadata.tsv",sep='\t')
+tx.rename(columns={'tid': 'TranscriptID'}, inplace=True)
+
+
+#Get those transcripts where there was no protein coded for
+nc_tx= tx[tx['final_strata'].isnull()]
+#Merge with EB
+eb_tx = tx.merge(eb, on=['TranscriptID'])
+#Merge with Gencode
+human_tx = tx.merge(human, on=['TranscriptID'])
+#Combine
+frames=[eb_tx,human_tx,nc_tx,sarsmd]
+frames = pd.concat(frames)
+
+frames.to_csv("Transcript_level_metadata.tsv",mode='w', header=True,index=False,sep='\t')
