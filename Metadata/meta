@@ -3,17 +3,17 @@ import pandas as pd
 #################Transcript level
 ##Read in EB genes, gencode genes, and transcript metadata. Rename gene file columns
 eb=pd.read_csv("EB",sep='\t',header=None)
-eb.columns =['tid', 'seq']
+eb.columns =['TranscriptID', 'seq']
 human=pd.read_csv("Human",sep='\t',header=None)
-human.columns =['tid', 'seq']
+human.columns =['TranscriptID', 'seq']
 tx=pd.read_csv("transcript_level_metadata.tsv",sep='\t')
 
 #Get those transcripts where there was no protein coded for
 nc_tx= tx[tx['final_strata'].isnull()]
 #Merge with EB
-eb_tx = tx.merge(eb, on=['tid'])
+eb_tx = tx.merge(eb, on=['TranscriptID'])
 #Merge with Gencode
-human_tx = tx.merge(human, on=['tid'])
+human_tx = tx.merge(human, on=['TranscriptID'])
 #Combine
 frames=[eb_tx,human_tx,nc_tx]
 frames = pd.concat(frames)
