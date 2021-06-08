@@ -45,5 +45,5 @@ eb_tx = tx.merge(eb, on=['TranscriptID'])
 human_tx = tx.merge(human, on=['TranscriptID'])
 #Merge and write
 tx_md=[eb_tx,human_tx,nc_tx,sarsmd]
-tx_md = pd.concat(frames)
+tx_md = pd.concat(tx_md)
 tx_md.to_csv("Transcript_level_metadata.tsv",mode='w', header=True,index=False,sep='\t')
