@@ -1,0 +1,55 @@
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' EB_Gencode_pep_NODOTS.fasta | sed 'N;s/\n/ /' | perl -p -i -e 's/ /\t/g' | grep "|ENSG0" > human
+cat human | sed 's/|/ /g' | awk 'BEGIN {OFS = "\t"}{print $2,$NF}' > Human
+rm human
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' EB_Gencode_pep_NODOTS.fasta | sed 'N;s/\n/ /' | perl -p -i -e 's/ /\t/g' | grep -v "|ENSG0" | sed 's/>mikado/EB/g' | awk 'BEGIN {OFS = "\t"}{print $1,$3}' > EB
+
+
+
+import pandas as pd
+
+
+##Read in EB genes, gencode genes, and transcript metadata. Rename gene file columns
+eb=pd.read_csv("EB",sep='\t',header=None)
+eb.columns =['tid', 'seq']
+human=pd.read_csv("Human",sep='\t',header=None)
+human.columns =['tid', 'seq']
+tx=pd.read_csv("transcript_level_metadata.tsv",sep='\t')
+
+#Get those transcripts where there was no protein coded for
+nc_tx= tx[tx['final_strata'].isnull()]
+#Merge with EB
+eb_tx = tx.merge(eb, on=['tid'])
+#Merge with Gencode
+human_tx = tx.merge(human, on=['tid'])
+#Combine
+frames=[eb_tx,human_tx,nc_tx]
+frames = pd.concat(frames)
+
+frames.to_csv("Transcript_level_metadata",mode='w', header=True,index=False)
+
+
+
+
+
+import pandas as pd
+
+#Read in metadata
+strata_md=pd.read_csv("gene_level_metadata.tsv",sep='\t')
+md=pd.read_csv("meta_data.tsv",sep='\t')
+#
+sarsmd=md[md['Gene_stable_ID'].str.contains('ENSSAST')]
+md=md[~md['Gene_stable_ID'].str.contains('ENSSAST')]
+
+
+
+md['Gene_stable_ID'] = md['Gene_stable_ID'].str.replace("mikado", "EB")
+
+md = md.drop(['Gene_name', 'strand','Gene_description'], axis=1)
+md = md.merge(strata_md, on=['Gene_stable_ID','chr'])
+list=[]
+list.append(md)
+list.append(sarsmd)
+md= pd.concat(list)
+
+
+md.to_csv('done.tsv',sep='\t',index=False)        
