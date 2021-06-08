@@ -14,6 +14,8 @@ wget -q ftp://ftp.ensemblgenomes.org/pub/viruses/fasta/sars_cov_2/cdna/Sars_cov_
 #download GRCh38.d1.vd1.fa.tar.gz and gather EB genes(EB.fasta)
 
 gunzip *.gz
+tar -xvf GRCh38.d1.vd1.fa.tar
+
 
 #create decoy list
 grep ">" GRCh38.d1.vd1.fa | cut -d " " -f 1 | tr -d ">" > decoys.txt
@@ -24,7 +26,7 @@ cat gencode.v36.transcripts.fa Sars_cov_2.ASM985889v3.cdna.all.fa EB.fasta GRCh3
 
 
 #cleanup
-rm gencode.v36.transcripts.fa Sars_cov_2.ASM985889v3.cdna.all.fa EB.fasta GRCh38.d1.vd1.fa
+rm gencode.v36.transcripts.fa Sars_cov_2.ASM985889v3.cdna.all.fa EB.fasta GRCh38.d1.vd1.fa  GRCh38.d1.vd1.fa.tar
 
 
 #create salmon index
