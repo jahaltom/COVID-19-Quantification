@@ -30,13 +30,17 @@ gene_md.to_csv('Gene_level_metadata.tsv',sep='\t',index=False)
 
 
 #################Transcript level
-##Read in protein seq's for Human EB gene and gencode gene transcripts, and transcript phylostrata metadata. Rename some file columns for later. 
+##Read in protein seq's for Human EB gene, gencode, and sars transcripts, and transcript phylostrata metadata. Rename some file columns for later. 
 eb=pd.read_csv("EB",sep='\t',header=None)
 eb.columns =['TranscriptID', 'seq']
 human=pd.read_csv("Human",sep='\t',header=None)
 human.columns =['TranscriptID', 'seq']
+sar_pep=pd.read_csv("sars",sep='\t',header=None)
+sar_pep.columns =['TranscriptID', 'seq']
+
 tx=pd.read_csv("transcript_level_metadata.tsv",sep='\t')
 tx.rename(columns={'tid': 'TranscriptID'}, inplace=True)
+
 
 
 #Get those transcripts where there was no protein coded for
@@ -45,7 +49,11 @@ nc_tx= tx[tx['final_strata'].isnull()]
 eb_tx = tx.merge(eb, on=['TranscriptID'])
 #Merge with Gencode
 human_tx = tx.merge(human, on=['TranscriptID'])
+
+sars_tx = sarsmd.merge(sar_pep, on=['TranscriptID'])
+
+
 #Merge and write
-tx_md=[eb_tx,human_tx,nc_tx,sarsmd]
+tx_md=[eb_tx,human_tx,nc_tx,sars_tx]
 tx_md = pd.concat(tx_md)
 tx_md.to_csv("Transcript_level_metadata.tsv",mode='w', header=True,index=False,sep='\t')
