@@ -5,7 +5,7 @@ from pyrpipe import sra,quant
 import pandas as pd
 
 
-####Read config#####
+#Read config
 configfile: "config.yaml"
 DIR = config['DIR']
 THREADS=config['THREADS']
@@ -13,7 +13,7 @@ Tr=config['transcriptome']
 
 
 
-#####Read in run_accession ids######
+#Read in run_accession ids
 with open ("RAids.txt") as f:
         ra_ids=f.read().splitlines()
 
@@ -46,7 +46,7 @@ rule merge:
 		thisdata.pop(0)		
         	#Run accession IDs
 		names=[]
-        	##Transcript and gene IDs
+        	#Transcript and gene IDs
 		txids=[]       
 		geneids=[]		
 		for l in thisdata:
@@ -56,59 +56,43 @@ rule merge:
 			if '|' in thisgene: thisgene=thisgene.split('|')[1]
 			txids.append(thistx)
 			geneids.append(thisgene)		
-		dftpm=pd.DataFrame({'TranscriptID':txids,'GeneID':geneids})
-        	##Make a copy for the counts
+		dftpm=pd.DataFrame({'TranscriptID':txids,'GeneID':geneids})        	
         	dfcount=pd.DataFrame({'TranscriptID':txids,'GeneID':geneids})
 		
 		
-		#read files in memory
+		#current quant file
 		for qf in input:
-            		##current filename(RAid)
-			name=qf.split('/')[1]
-            		##Will become list of all RAids
+            		#current filename(RAid)
+			name=qf.split('/')[1]           		
 			names.append(name)
-            		##Get TPM
+            		#Get TPM
 			tpm=pd.read_csv(qf,sep='\t',usecols=[3],skiprows=0)
-            		##Get Counts
+            		#Get Counts
             		counts=pd.read_csv(qf,sep='\t',usecols=[4],skiprows=0)
-            		##Add TPM and counts to respective df with current Run accession ID as column name
+            		#Add TPM and counts to respective df with current Run accession ID as column name
 			dftpm[name]=tpm['TPM']
             		dfcount[name]=counts['NumReads']
 			
-        	#transcript TPMs. 
+        	##transcript level TPMs. 
+		#Read in metadata
 		tx_md=pd.read_csv('Transcript_level_metadata.tsv',sep='\t',skiprows=0)
+		#Fetch transcript ids and TPMs for all RA ids. 
 		df_tx=dftpm[['TranscriptID']+names].copy()
-		df_tx = tx_md.merge(df_tx, on=['TranscriptID'])
-		
-        	
+		df_tx = tx_md.merge(df_tx, on=['TranscriptID'])   	
                 df_tx.to_csv(output.outfile,sep='\t',index=False)
-              
-        	
-		###Collapse transcript to respective gene names sum counts and TPMs
-		
-		#Gather counts and TPMs for each transcript
-		df_gene_tpm=dftpm[['TranscriptID']+names].copy()	
-        	df_gene_count=dfcount[['TranscriptID']+names].copy()
-		
-        
+                      	
+		##Collapse transcripts to into respective gene ids sum counts and TPMs		        
         	#Read in gene metadata
-       	 	md=pd.read_csv('Gene_level_metadata.tsv',sep='\t',skiprows=0) 
-        	
-        	
-		#Make df with transcript id and corresponding gene id
-		md2=md[['TranscriptID','Gene_stable_ID']]
-		##Merge TPM and count data by TranscriptID
-		df_gene_tpm=md2.merge(df_gene_tpm, on=['TranscriptID'], how='right')       	      
-        	df_gene_count=md2.merge(df_gene_count, on=['TranscriptID'], how='right')
+       	 	md=pd.read_csv('Gene_level_metadata.tsv',sep='\t',skiprows=0)
+		df_gene_tpm=dftpm[['GeneID']+names].copy()	
+        	df_gene_count=dfcount[['GeneID']+names].copy()        	
+        		
 		
 		#Collapse so that each gene id is listed once. sum up corresponding transcript TPM and counts.
 		df_gene_tpm = df_gene_tpm.groupby(['Gene_stable_ID'],as_index = False).sum()
         	df_gene_count = df_gene_count.groupby(['Gene_stable_ID'],as_index = False).sum()
-		
-		#Format metadata to have each gene ID once
-        	
-
-     		
+				
+				
 		##Merge metadata to counts and TPM
         	df_gene_tpm=md.merge(df_gene_tpm, on=['Gene_stable_ID'], how='right')        	    	
         	df_gene_count=md.merge(df_gene_count, on=['Gene_stable_ID'], how='right')
