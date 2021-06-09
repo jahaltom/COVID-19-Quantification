@@ -46,16 +46,21 @@ rule merge:
 		thisdata.pop(0)		
         	#Run accession IDs
 		names=[]
-        	##Transcript IDs
+        	##Transcript and gene IDs
 		txids=[]       
+		geneids=[]		
 		for l in thisdata:
-            	#Get 1st column (TranscriptID)
-			thistx=l.split('\t')[0]                    
+			thistx=l.split('\t')[0]
+			if '|' in thistx: thistx=thistx.split('|')[0]
+			thisgene=l.split('\t')[0]
+			if '|' in thisgene: thisgene=thisgene.split('|')[1]
 			txids.append(thistx)
-		##For TPM	
-		dftpm=pd.DataFrame({'TranscriptID':txids})
+			geneids.append(thisgene)		
+		dftpm=pd.DataFrame({'TranscriptID':txids,'GeneID':geneids})
         	##Make a copy for the counts
-        	dfcount=pd.DataFrame({'TranscriptID':txids})
+        	dfcount=pd.DataFrame({'TranscriptID':txids,'GeneID':geneids})
+		
+		
 		#read files in memory
 		for qf in input:
             		##current filename(RAid)
@@ -63,18 +68,20 @@ rule merge:
             		##Will become list of all RAids
 			names.append(name)
             		##Get TPM
-			thisdata=pd.read_csv(qf,sep='\t',usecols=[3],skiprows=0)
+			tpm=pd.read_csv(qf,sep='\t',usecols=[3],skiprows=0)
             		##Get Counts
             		counts=pd.read_csv(qf,sep='\t',usecols=[4],skiprows=0)
             		##Add TPM and counts to respective df with current Run accession ID as column name
-			dftpm[name]=thisdata['TPM']
+			dftpm[name]=tpm['TPM']
             		dfcount[name]=counts['NumReads']
 			
         	#transcript TPMs. 
 		tx_md=pd.read_csv('Transcript_level_metadata.tsv',sep='\t',skiprows=0)
 		df_tx=dftpm[['TranscriptID']+names].copy()
-		df_tx = df_tx.merge(tx_md, on=['TranscriptID'])
-        
+		df_tx = tx_md.merge(df_tx, on=['TranscriptID'])
+		
+        	
+                df_tx.to_csv(output.outfile,sep='\t',index=False)
               
         	
 		###Collapse transcript to respective gene names sum counts and TPMs
@@ -86,7 +93,7 @@ rule merge:
         
         	#Read in gene metadata
        	 	md=pd.read_csv('Gene_level_metadata.tsv',sep='\t',skiprows=0) 
-        	md.rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
+        	
         	
 		#Make df with transcript id and corresponding gene id
 		md2=md[['TranscriptID','Gene_stable_ID']]
