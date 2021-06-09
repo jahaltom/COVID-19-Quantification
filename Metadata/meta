@@ -20,6 +20,8 @@ md['Gene_stable_ID'] = md['Gene_stable_ID'].str.replace("mikado", "EB")
 md = md.merge(strata_md, on=['Gene_stable_ID','chr'])
 
 #Merge and write
+md.rename(columns={ md.columns[0]: "TranscriptID" }, inplace = True)
+sarsmd.rename(columns={ sarsmd.columns[0]: "TranscriptID" }, inplace = True)
 gene_md=[md,sarsmd]
 gene_md= pd.concat(gene_md)
 ##Once the snakefile is fun, this file will be compressed to the gene level##
