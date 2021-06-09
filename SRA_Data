@@ -56,8 +56,8 @@ rule merge:
 			if '|' in thisgene: thisgene=thisgene.split('|')[1]
 			txids.append(thistx)
 			geneids.append(thisgene)		
-		dftpm=pd.DataFrame({'TranscriptID':txids,'GeneID':geneids})        	
-        	dfcount=pd.DataFrame({'TranscriptID':txids,'GeneID':geneids})
+		dftpm=pd.DataFrame({'TranscriptID':txids,'Gene_stable_ID':geneids})        	
+        	dfcount=pd.DataFrame({'TranscriptID':txids,'Gene_stable_ID':geneids})
 		
 		
 		#current quant file
@@ -84,8 +84,8 @@ rule merge:
 		##Collapse transcripts to into respective gene ids sum counts and TPMs		        
         	#Read in gene metadata
        	 	md=pd.read_csv('Gene_level_metadata.tsv',sep='\t',skiprows=0)
-		df_gene_tpm=dftpm[['GeneID']+names].copy()	
-        	df_gene_count=dfcount[['GeneID']+names].copy()        	
+		df_gene_tpm=dftpm[['Gene_stable_ID']+names].copy()	
+        	df_gene_count=dfcount[['Gene_stable_ID']+names].copy()        	
         		
 		
 		#Collapse so that each gene id is listed once. sum up corresponding transcript TPM and counts.
