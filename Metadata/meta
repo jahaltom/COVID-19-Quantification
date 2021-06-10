@@ -9,6 +9,9 @@ md=pd.read_csv("meta_data.tsv",sep='\t')
 
 #Extract SARS transcripts
 sarsmd=md[md['Gene_stable_ID'].str.contains('ENSSAST')]
+sarsmd2=sarsmd.copy()
+sarsmd2.drop('tid', axis=1, inplace=True)
+
 #Remove SARS transcripts. Only Gencode 36 and EB genes have phylostrata. 
 md=md[~md['Gene_stable_ID'].str.contains('ENSSAST')]
 #Unwanted columns
@@ -21,7 +24,7 @@ md.drop_duplicates()
 md = md.merge(strata_md, on=['Gene_stable_ID','chr'])
 
 #Merge and write
-gene_md=[md,sarsmd]
+gene_md=[md,sarsmd2] 
 gene_md= pd.concat(gene_md)
 ##Once the snakefile is fun, this file will be compressed to the gene level##
 gene_md.to_csv('Gene_level_metadata.tsv',sep='\t',index=False)        
