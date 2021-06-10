@@ -10,7 +10,7 @@ df_gene_tpm = pd.read_csv("results_TPM_gene.tsv",sep='\t')
 #create a median column
 df_gene_tpm['median']=df_gene_tpm.median(axis=1)
 #Remove genes where TPM median < 1, except for SARs genes. 
-indexNames = df_gene_tpm[ (df_gene_tpm['median'] < 1) & (df_gene_tpm['chr'] != 'SARSCOV2_ASM985889v3') ].index
+indexNames = df_gene_tpm[(df_gene_tpm['median'] < 1) & (df_gene_tpm['Gene_type'] == 'EB_novel') ].index
 df_gene_tpm.drop(indexNames , inplace=True)
 
 #calculate medians of median tpm dist for protein_coding, lncRNA, and EB genes
@@ -21,4 +21,4 @@ med_med_eb=df_gene_tpm.loc[df_gene_tpm['Gene_type'] == 'EB_novel']['median'].med
 indexNames = df_gene_tpm[(df_gene_tpm['Gene_type'] == 'EB_novel') & (df_gene_tpm['median'] < med_med_lnc) ].index
 df_gene_tpm.drop(indexNames , inplace=True)
 
-df_gene_tpm.to_csv('results_TPM_gene.tsv',sep='\t',index=False)        
+df_gene_tpm.to_csv('JH-2021610-tpm.filtered-Mason-Nasal',sep='\t',index=False)        
