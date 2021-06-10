@@ -10,7 +10,7 @@ md=pd.read_csv("meta_data.tsv",sep='\t')
 #Extract SARS transcripts
 sarsmd=md[md['Gene_stable_ID'].str.contains('ENSSAST')]
 sarsmd2=sarsmd.copy()
-sarsmd2.drop('tid', axis=1, inplace=True)
+sarsmd.drop('tid', axis=1, inplace=True)
 
 #Remove SARS transcripts. Only Gencode 36 and EB genes have phylostrata. 
 md=md[~md['Gene_stable_ID'].str.contains('ENSSAST')]
@@ -24,7 +24,7 @@ md.drop_duplicates()
 md = md.merge(strata_md, on=['Gene_stable_ID','chr'])
 
 #Merge and write
-gene_md=[md,sarsmd2] 
+gene_md=[md,sarsmd] 
 gene_md= pd.concat(gene_md)
 ##Once the snakefile is fun, this file will be compressed to the gene level##
 gene_md.to_csv('Gene_level_metadata.tsv',sep='\t',index=False)        
@@ -39,11 +39,13 @@ human=pd.read_csv("Human",sep='\t',header=None)
 human.columns =['TranscriptID', 'seq']
 sars=pd.read_csv("sars",sep='\t',header=None)
 sars.columns =['TranscriptID', 'seq']
+sarsmd2.rename(columns={'tid': 'TranscriptID'}, inplace=True)
+
 
 tx=pd.read_csv("transcript_level_metadata.tsv",sep='\t')
 tx.rename(columns={'tid': 'TranscriptID'}, inplace=True)
 
-sarsmd.rename(columns={'tid': 'TranscriptID'}, inplace=True)
+
 
 #Get those transcripts where there was no protein coded for
 nc_tx= tx[tx['final_strata'].isnull()]
@@ -51,7 +53,10 @@ nc_tx= tx[tx['final_strata'].isnull()]
 eb_tx = tx.merge(eb, on=['TranscriptID'])
 #Merge with Gencode
 human_tx = tx.merge(human, on=['TranscriptID'])
+
+sars_tx = sarsmd2.merge(sars, on=['TranscriptID'])
+
 #Merge and write
-tx_md=[eb_tx,human_tx,nc_tx,sarsmd]
+tx_md=[eb_tx,human_tx,nc_tx,sars_tx]
 tx_md = pd.concat(tx_md)
 tx_md.to_csv("Transcript_level_metadata.tsv",mode='w', header=True,index=False,sep='\t')
