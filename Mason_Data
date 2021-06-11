@@ -68,7 +68,7 @@ rule merge:
 			thisgene=l.split('\t')[0]
 			if '|' in thisgene: thisgene=thisgene.split('|')[1]
 			txids.append(thistx)
-			geneids.append(thisgene)		
+					
 		dftpm=pd.DataFrame({'TranscriptID':txids})        	
         	dfcount=pd.DataFrame({'TranscriptID':txids})
 		
