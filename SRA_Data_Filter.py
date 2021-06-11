@@ -32,8 +32,8 @@ for key in d:
     
     #create a median column
     tpm['median']=tpm.median(axis=1)
-    #Remove genes where TPM median < 1, except for SARs genes.
-    indexNames = tpm[ (tpm['median'] < 1) & (tpm['chr'] != 'SARSCOV2_ASM985889v3') ].index
+    #Remove EB genes where TPM median < 1
+    indexNames = tpm[ (tpm['median'] < 1) & (tpm['Gene_type'] == 'EB_novel') ].index
     tpm.drop(indexNames , inplace=True)
 
     #calculate medians of median tpm dist for protein_coding, lncRNA, and EB genes
