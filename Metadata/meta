@@ -18,7 +18,7 @@ md=md[~md['Gene_stable_ID'].str.contains('ENSSAST')]
 md = md.drop(['Gene_name', 'strand','Gene_description','tid'], axis=1)
 #Change EB Gene_stable_ID to match the current version. 
 md['Gene_stable_ID'] = md['Gene_stable_ID'].str.replace("mikado", "EB")
-md.drop_duplicates()
+md=md.drop_duplicates()
 
 #Merge two metadatas together to add phylostrata info to other. 
 md = md.merge(strata_md, on=['Gene_stable_ID','chr'])
