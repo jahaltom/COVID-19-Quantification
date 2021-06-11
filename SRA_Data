@@ -48,7 +48,7 @@ rule merge:
 		names=[]
         	#Transcript and gene IDs
 		txids=[]       
-		geneids=[]
+		
 		#Get transcript ids
 		for l in thisdata:
 			thistx=l.split('\t')[0]
