@@ -56,7 +56,7 @@ genes = genes.drop_duplicates()
 genes = DataFrame(genes)
 genes.columns=['Gene_stable_ID']
 dftpm = pd.merge(dftpm,genes,on=['Gene_stable_ID'])
-dftpm.to_csv("results_TPM_gene.filtered.tsv",mode='w', header=True,index=False)
+dftpm.to_csv("results_TPM_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
 
 
 
