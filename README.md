@@ -7,7 +7,7 @@ This pipeline will take transcriptome data and quantify the expression on Human 
 
 
 ## Prepareing the reference data. 
-* Prepare data: This will create a fasta file of the Human and SARs transcriptome, and includes Human genome as decoy for salmon. Will use Human genome to make decoys.txt file for salmon.(For this analysis it also included our Human EB gene trancritpome as well as viral decoys and spike-ins). 
+* Prepare data: Builds a salmon index using the Human transcriptome(GencodeV36), Sars-Cov-2 transcriptome (ASM985889v3), and Human EB gene transcripts. The Human Genome along with viral decoysand spike-insfrom the Genomic Data Commons were also used with Salmon.
 
 
 ## Parameters
