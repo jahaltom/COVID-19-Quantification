@@ -1,6 +1,6 @@
-# COVID-19-Quantification
-This pipeline will take transcriptome data and quantify the expression on the Human (GencodeV36) and SARS-COV-2(ASM985889v3) transcriptomes as well as human EB gene treanscripts using pyrpipe https://github.com/urmi-21/pyrpipe.
+# Making the metadata
 
-## Prerequisites
-* Run: `conda env create -f env.yaml`
+## Gather transcript_level_metadata.tsv,gene_level_metadata.tsv,EB_Gencode_pep_NODOTS.fasta and Sars.pep. 
+
+* Run: `conda bash make.fasta.sh`
 * Activate the environment: `conda activate pyrpipe_covid`
