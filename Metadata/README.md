@@ -10,4 +10,4 @@ Create final fasta
 
 
 ## Metadata
-* meta_data.tsv.gz: A metadata file for Human annotated, SARS-COV-2, as well as the EB genes used in this study. 
+* meta_data.tsv.bz2: A metadata file for Human annotated, SARS-COV-2, as well as the EB genes used in this study. 
