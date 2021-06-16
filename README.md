@@ -1,5 +1,5 @@
 # COVID-19-Quantification
-This pipeline will take transcriptome data and quantify the expression on Human transcriptome as well as SARs using pyrpipe https://github.com/urmi-21/pyrpipe.
+This pipeline will take transcriptome data and quantify the expression on the Human (GencodeV36) and SARS-COV-2(ASM985889v3) transcriptomes as well as human EB gene treanscripts using pyrpipe https://github.com/urmi-21/pyrpipe.
 
 ## Prerequisites
 * Run: `conda env create -f env.yaml`
@@ -7,7 +7,7 @@ This pipeline will take transcriptome data and quantify the expression on Human 
 
 
 ## Prepareing the reference data. 
-* Prepare data: Builds a salmon index using the Human transcriptome(GencodeV36), Sars-Cov-2 transcriptome (ASM985889v3), and Human EB gene transcripts. The Human Genome along with viral decoysand spike-insfrom the Genomic Data Commons were also used with Salmon.
+* Prepare data: Builds a salmon index using the Human transcriptome(GencodeV36), SARS-COV-2 transcriptome (ASM985889v3), and Human EB gene transcripts. The Human Genome along with viral decoysand spike-insfrom the Genomic Data Commons were also used with Salmon.
 
 
 ## Parameters
@@ -15,17 +15,17 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
 
 
 ## Snakefiles and filters
-* SRA_Data: This code takes in run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human and SARs transcriptome. Outputs TPM and counts. 
+* SRA_Data: This code takes in run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts. 
 
-* SRA_Data_Filter:This takes output from Snakefile(results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts by study. Additionaly, the TPM is filtered by removing those protein coding and EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. A file called "List" that contans the study_accession IDs and their corrisponding run_accession IDs is alos needed.
+* SRA_Data_Filter:This takes output from Snakefile(results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts by study. Additionaly, the TPM is filtered by removing those EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. A file called "List" that contans the study_accession IDs and their corrisponding run_accession IDs is also needed.
  
-* Mason_Data: Takes bam files from Mason Covid study and converts to fastq, then it will quantify the expression on Human and SARs transcriptome. Outputs TPM and counts.
+* Mason_Data: Takes bam files from the Mason Nasal Covid study and converts to fastq, then it will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts.
 
 * Mason_Data_Filter: This takes output from Mason Data(results_TPM_gene.tsv) and filters teh TPM by removing those protein coding and EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. 
 
 
 ## Metadata
-* meta_data.tsv.gz: A metadata file for Human and SARs genes, as well as the EB genes used in this study. 
+* meta_data.tsv.gz: A metadata file for Human annotated, SARS-COV-2, as well as the EB genes used in this study. 
 
 
 ## Execution 
