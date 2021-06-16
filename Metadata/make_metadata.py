@@ -3,12 +3,13 @@ import pandas as pd
 
 #####################Gene Level
 
-#Read in metadata from phylostrata. Each gene is represented by 1 line, transcripts are merged. 
+#Read in metadata from phylostrata. Each gene is represented by 1 line, transcripts are merged. Read in general metadata. 
 strata_md=pd.read_csv("gene_level_metadata.tsv",sep='\t')
 md=pd.read_csv("meta_data.tsv",sep='\t')
 
-#Extract SARS transcripts
+#Extract SARS transcripts and remove transcript column.
 sarsmd=md[md['Gene_stable_ID'].str.contains('ENSSAST')]
+#for later
 sarsmd2=sarsmd.copy()
 sarsmd.drop('tid', axis=1, inplace=True)
 
