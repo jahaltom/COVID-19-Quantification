@@ -9,7 +9,7 @@ df_gene_tpm = pd.read_csv("results_TPM_gene.tsv",sep='\t')
 
 #create a median column
 df_gene_tpm['median']=df_gene_tpm.median(axis=1)
-#Remove genes where TPM median < 1, except for SARs genes. 
+#Remove EB genes where TPM median < 1 
 indexNames = df_gene_tpm[(df_gene_tpm['median'] < 1) & (df_gene_tpm['Gene_type'] == 'EB_novel') ].index
 df_gene_tpm.drop(indexNames , inplace=True)
 
