@@ -52,9 +52,7 @@ rule merge:
 		#Get transcript ids
 		for l in thisdata:
 			thistx=l.split('\t')[0]
-			if '|' in thistx: thistx=thistx.split('|')[0]
-			thisgene=l.split('\t')[0]
-			if '|' in thisgene: thisgene=thisgene.split('|')[1]
+			if '|' in thistx: thistx=thistx.split('|')[0]			
 			txids.append(thistx)
 					
 		dftpm=pd.DataFrame({'TranscriptID':txids})        	
