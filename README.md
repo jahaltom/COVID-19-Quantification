@@ -24,10 +24,6 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
 * Mason_Data_Filter: This takes output from Mason Data(results_TPM_gene.tsv) and filters teh TPM by removing those protein coding and EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. 
 
 
-## Metadata
-* meta_data.tsv.gz: A metadata file for Human annotated, SARS-COV-2, as well as the EB genes used in this study. 
-
-
 ## Execution 
 snakemake -j 50 -s snakefile --cluster "sbatch -t 01:00:00 -c 60"
 
