@@ -7,3 +7,7 @@ Create fasta files for human
 
 Create final fasta
 * Run: `python make_metadata.py`
+
+
+## Metadata
+* meta_data.tsv.gz: A metadata file for Human annotated, SARS-COV-2, as well as the EB genes used in this study. 
