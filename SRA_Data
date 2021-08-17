@@ -18,7 +18,7 @@ with open ("RAids.txt") as f:
         ra_ids=f.read().splitlines()
 
 #create salmon object. If index is not present it will be created
-salmon=quant.Salmon(index="human_data/salmon_index",transcriptome=Tr,threads=15)
+salmon=quant.Salmon(index="human_data/salmon_index",transcriptome=Tr,threads=THREADS)
 
 rule all:
 	input:
