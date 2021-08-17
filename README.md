@@ -11,7 +11,7 @@ This pipeline will take transcriptome data and quantify the expression on the Hu
 
 
 ## Parameters
-The salmon tool parameters are specified in the params directory(needed by pyrpipe). To modify the parameters edit salmon_index.yaml. pyrpipe parameters are specified in the pyrpipe_conf.yaml file. config.yaml contains important parameters for the Snakefiles(SRA_Data and Mason_Data). 
+The salmon tool parameters are specified in the params directory(needed by pyrpipe). To modify the parameters edit salmon_index.yaml. pyrpipe parameters are specified in the pyrpipe_conf.yaml file. config.yaml contains important parameters for the Snakefiles(SRA_Data and Mason_Data) such as thread number for Salmon, path to fasta, output directory name. 
 
 
 ## Snakefiles and filters
