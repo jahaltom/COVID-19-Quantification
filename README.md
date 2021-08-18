@@ -15,17 +15,17 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
 
 
 ## Snakefiles and filters
-* SRA_Data: This code takes in run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts. 
+* SRA_Quant: This code takes in run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts. 
 
-* SRA_Data_Filter:This takes output from Snakefile(results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts by study. Additionaly, the TPM is filtered by removing those EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. A file called "List" that contans the study_accession IDs and their corrisponding run_accession IDs is also needed.
+* SRA_Quant_Filter.py:This takes output from SRA_Quant(results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts by study. Additionaly, the TPM is filtered by removing those EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. A tab delimited file called "List" that contans the study_accession IDs and their corrisponding run_accession IDs in that order is also needed.
  
-* Mason_Data: Takes bam files from the Mason Nasal Covid study and converts to fastq, then it will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts.
+* Bam_Quant: Takes bam files and converts to fastq, then it will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts.
 
-* Mason_Data_Filter: This takes output from Mason Data(results_TPM_gene.tsv) and filters teh TPM by removing those protein coding and EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. 
+* Bam_Quant_Filter.py: This takes output from Bam_Quant(results_TPM_gene.tsv) and filters it by removing EB genes where the median TPM < 1.  
 
 
 ## Execution 
-snakemake -j 50 -s snakefile --cluster "sbatch -t 01:00:00 -c 60"
+snakemake -j 50 -s snakefile --cluster "sbatch -t 01:00:00 -c 25"
 
 
 
