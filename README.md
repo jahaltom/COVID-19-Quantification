@@ -7,7 +7,7 @@ This pipeline will take transcriptome data and quantify the expression on the Hu
 
 
 ## Prepareing the reference data. 
-* Prepare data: Builds a salmon index using the Human transcriptome(GencodeV36), SARS-COV-2 transcriptome (ASM985889v3), and Human EB gene transcripts. The Human Genome along with viral decoysand spike-insfrom the Genomic Data Commons were also used with Salmon.
+* Prepare data: Builds a salmon index using the Human transcriptome(GencodeV36), SARS-COV-2 transcriptome (ASM985889v3), and Human EB gene transcripts. To increase mapping accuracy, the human genome along with viral decoys and spike-ins from the Genomic Data Commons (GRCh38.d1.vd1) will be used as decoys for Salmon.
 
 
 ## Parameters
