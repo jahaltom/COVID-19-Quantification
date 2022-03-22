@@ -48,7 +48,7 @@ rule quant:
 
 rule merge:
 	input:
-		["{wd}/{sample}/salmon_out/quant.sf".format(wd=DIR,sample=s) for s in ra_ids]
+		["{wd}/{sample}/salmon_out/quant.sf".format(wd=DIR,sample=s) for s in ids]
 	output:
 		outfile="{wd}/results_TPM_tx.tsv"
 	run:
