@@ -28,18 +28,16 @@ rule quant:
         output:
                 quant_file="{wd}/{sample}/salmon_out/quant.sf"
         run:
-            # get sample name {sample}
-            srrid=wildcards.sample
             # Get path to bam file
-            bam=bam_path+srrid+"/"+srrid+"_Aligned.sortedByCoord_sorted.out.bam"                
+            bam=bam_path+wildcards.sample+"/"+wildcards.sample+"_Aligned.sortedByCoord_sorted.out.bam"                
             #Pathway for fastq files and salmon output 
-            path=DIR + "/" + srrid+ "/"
-            #Fastq file names and path. 
-            fq1=path + srrid + '1.fastq'
-            fq2=path + srrid + '2.fastq'
+            path=DIR + "/" + wildcards.sample+ "/"
+            #Fastq files. 
+            fq1=path + wildcards.sample + '1.fastq'
+            fq2=path + wildcards.sample + '2.fastq'
             #Run picard to convert bam to fastq
             picard=Runnable(command='picard')
-            param={'SamToFastq':'','I=': bam ,'F=': fq1,'F2=': fq2}
+            param={'-Xmx20g':'','SamToFastq':'','I=': bam ,'F=': fq1,'F2=': fq2}
             picard.run(**param)
             #Run Salmon on sra object(fastq files) and delete fastq when finished.  
             sra.SRA(fastq=fq1,fastq2=fq2,directory=path).quant(salmon).delete_fastq()
