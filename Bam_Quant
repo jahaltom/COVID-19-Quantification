@@ -29,7 +29,7 @@ rule quant:
                 quant_file="{wd}/{sample}/salmon_out/quant.sf"
         run:
             # get sample name {sample}
-            srrid={sample}
+            srrid=wildcards.sample
             # Get path to bam file
             bam=bam_path+srrid+"/"+srrid+"_Aligned.sortedByCoord_sorted.out.bam"                
             #Pathway for fastq files and salmon output 
