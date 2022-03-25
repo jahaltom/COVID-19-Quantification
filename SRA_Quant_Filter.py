@@ -35,6 +35,9 @@ for key in d:
     #Remove EB genes where TPM median < 1
     indexNames = tpm[ (tpm['median'] < 1) & (tpm['Gene_type'] == 'EB_novel') ].index
     tpm.drop(indexNames , inplace=True)
+    
+    
+
 
     #calculate medians of median tpm dist for protein_coding, lncRNA, and EB genes
     med_med_pc=tpm.loc[tpm['Gene_type'] == 'protein_coding']['median'].median()
@@ -45,20 +48,25 @@ for key in d:
     tpm.drop(indexNames , inplace=True)
     ##Append genes that made it through filter to list
     genes.append(tpm['Gene_stable_ID'])
+    
+    #Gather list of Gene_stable_IDs from filtered TPM an use to filter counts. 
+    id_list=tpm['Gene_stable_ID'].tolist()
+    count=count[count['Gene_stable_ID'].isin(id_list)]
+
     #write to respective study
     tpm.to_csv(key +'/'+ key + ".TPM.tsv",sep='\t',index=False)
     count.to_csv(key +'/'+ key + ".Count.tsv",sep='\t',index=False)
     
     
-##Use genes that pass TPM filter(genes) to filter file that contains TPM for all studies. 
+##Use genes that pass TPM filter(genes) to filter file that contains TPM and Counts for all studies. 
 genes = pd.concat(genes,ignore_index=True)
 genes = genes.drop_duplicates()
 genes = DataFrame(genes)
 genes.columns=['Gene_stable_ID']
 dftpm = pd.merge(dftpm,genes,on=['Gene_stable_ID'])
 dftpm.to_csv("results_TPM_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
-
-
+dfcount = pd.merge(dfcount,genes,on=['Gene_stable_ID'])
+dfcount.to_csv("results_Count_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
 
 
 
