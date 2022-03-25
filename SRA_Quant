@@ -6,7 +6,7 @@ import pandas as pd
 
 
 #Read in config file
-configfile: "config.yaml"
+configfile: "SRA_config.yaml"
 DIR = config['DIR']
 THREADS=config['THREADS']
 Tr=config['transcriptome']
