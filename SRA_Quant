@@ -6,7 +6,7 @@ import pandas as pd
 
 
 #Read in config file
-configfile: "SRA_config.yaml"
+configfile: "config.yaml"
 DIR = config['DIR']
 THREADS=config['THREADS']
 
