@@ -1,4 +1,6 @@
 DIR = 'out'
 THREADS= 25
-FileType='Bam'
+#Specify file type: fastq,fq, or bam
+FileType='bam'
+#Specify layout: Paired or Single
 Layout='Paired'
