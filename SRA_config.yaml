@@ -1,3 +1,2 @@
 DIR: "out"
 THREADS: 25
-transcriptome: "human_data/human_sars_tr_EB_decoy.fasta"
