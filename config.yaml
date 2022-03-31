@@ -1,7 +1,7 @@
 DIR = 'out'
-THREADS= 25
+THREADS= 16
 #Specify file type: fastq,fq, or bam
-FileType='bam'
+FileType= 'bam'
 #Specify layout: Paired or Single
-Layout='Paired'
-Transcriptome='human_data/human_sars_tr_EB_decoy.fasta'
+Layout= 'Paired'
+Transcriptome= 'Rat_data/RatTranscrptome_decoy.fasta'
