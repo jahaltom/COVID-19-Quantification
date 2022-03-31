@@ -1,0 +1,4 @@
+DIR = 'out'
+THREADS= 25
+FileType='Bam'
+Layout='Paired'
