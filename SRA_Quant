@@ -9,7 +9,7 @@ import pandas as pd
 configfile: "SRA_config.yaml"
 DIR = config['DIR']
 THREADS=config['THREADS']
-Tr=config['transcriptome']
+
 
 
 
@@ -18,7 +18,7 @@ with open ("RAids.txt") as f:
         ra_ids=f.read().splitlines()
 
 #create salmon object. If index is not present it will be created
-salmon=quant.Salmon(index="human_data/salmon_index",transcriptome=Tr,threads=THREADS)
+salmon=quant.Salmon(index="human_data/salmon_index",transcriptome="human_data/human_sars_tr_EB_decoy.fasta",threads=THREADS)
 
 rule all:
 	input:
