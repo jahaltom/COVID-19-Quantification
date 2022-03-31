@@ -21,6 +21,10 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
  
 * Bam-Fastq_Quant: Takes in bam/fastq files and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts.
 
+Bam/Fastq files should be in this structre:
+out/Sample1/Sample1.fastq
+out/Sample2/Sample2.fastq
+
 * SingleStudy_Filter.py: This takes output from Bam-Fastq_Quant(results_TPM_gene.tsv and results_Count_gene.tsv) and filters it by removing EB genes where the median TPM < 1.  
 
 
