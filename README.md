@@ -17,11 +17,11 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
 ## Snakefiles and filters
 * SRA_Quant: This code takes in run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts. 
 
-* MultiStudy_Filter.py:This takes output from SRA_Quant(results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts by study. Additionaly, the TPM is filtered by removing those EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. A tab delimited file called "List" that contans the study_accession IDs and their corrisponding run_accession IDs in that order is also needed..... This script also outputs a file that contains all the genes that passed the TPM filter for any study. This will contain all the samples from all the studies and their corrisponding TPM for that gene. 
+* MultiStudy_Filter.py: This takes output from SRA_Quant(results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts by study. Additionaly, the TPM is filtered by removing those EB genes where the median < 1, and then removes EB genes where median TPM is less than that of the median of all lncRNA genes. The same genes are removed from counts as well. A tab delimited file called "List" that contans the study_accession IDs and their corrisponding run_accession IDs in that order is also needed. This script also outputs a file that contains all the genes that passed the TPM filter for any study and the corresponding counts as well. 
  
-* Bam-Fastq_Quant: Takes bam files and converts to fastq, then it will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts.
+* Bam-Fastq_Quant: Takes in bam/fastq files and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts.
 
-* SingleStudy_Filter.py: This takes output from Bam_Quant(results_TPM_gene.tsv) and filters it by removing EB genes where the median TPM < 1.  
+* SingleStudy_Filter.py: This takes output from Bam-Fastq_Quant(results_TPM_gene.tsv and results_Count_gene.tsv) and filters it by removing EB genes where the median TPM < 1.  
 
 
 ## Execution 
