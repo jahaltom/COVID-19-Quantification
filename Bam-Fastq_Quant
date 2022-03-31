@@ -8,7 +8,7 @@ import pandas as pd
 
 
 #Read in config file
-configfile: "config.yaml"
+configfile: "BamFastqconfig.yaml"
 DIR = config['DIR']
 THREADS=config['THREADS']
 FileType=config['FileType']
