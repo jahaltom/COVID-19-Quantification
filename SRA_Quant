@@ -37,7 +37,7 @@ rule quant:
 		sra.SRA(srrid,directory=DIR).trim(trim_galore).quant(salmon).delete_fastq()
 rule merge:
         input:
-                ["{wd}/{sample}/salmon_out/quant.sf".format(wd=DIR,sample=s) for s in ids]
+                ["{wd}/{sample}/salmon_out/quant.sf".format(wd=DIR,sample=s) for s in ra_ids]
         output:
                 outfile="{wd}/results_TPM_tx.tsv"
         run:
