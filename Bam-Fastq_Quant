@@ -43,11 +43,11 @@ rule quant:
 
                     if len(my_files_path) == 1:
                         #Run Salmon on sra object(fastq files) and delete fastq when finished.
-                        sra.SRA(fastq=my_files_path[0],directory=path).trim(trim_galore).quant(salmon)
+                        sra.SRA(fastq=my_files_path[0],directory=path).trim(trim_galore).quant(salmon).delete_fastq()
         
                     elif len(my_files_path) == 2:
                         #Run Salmon on sra object(fastq files) and delete fastq when finished.
-                        sra.SRA(fastq=my_files_path[0],fastq2=my_files_path[1],directory=path).trim(trim_galore).quant(salmon)                                                               
+                        sra.SRA(fastq=my_files_path[0],fastq2=my_files_path[1],directory=path).trim(trim_galore).quant(salmon).delete_fastq()                                                               
                         
                 elif FileType == 'bam' and Layout == "Paired":
                     #bam file paths
@@ -63,7 +63,7 @@ rule quant:
                     picard.run(**param)
                     
                     #Run Salmon on sra object(fastq files) and delete fastq when finished.
-                    sra.SRA(fastq=fq1,fastq2=fq2,directory=path).trim(trim_galore).quant(salmon)
+                    sra.SRA(fastq=fq1,fastq2=fq2,directory=path).trim(trim_galore).quant(salmon).delete_fastq()
                 elif FileType == 'bam' and Layout == "Single":
                     #bam file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
@@ -77,7 +77,7 @@ rule quant:
                     picard.run(**param)
                     
                     #Run Salmon on sra object(fastq files) and delete fastq when finished.
-                    sra.SRA(fastq=fq,directory=path).trim(trim_galore).quant(salmon)
+                    sra.SRA(fastq=fq,directory=path).trim(trim_galore).quant(salmon).delete_fastq()
 
                     
                     
