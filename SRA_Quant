@@ -12,6 +12,8 @@ THREADS=config['THREADS']
 Tr=config['Transcriptome']
 
 
+#creates a trim_galore object.
+trim_galore=qc.Trimgalore(threads=4)
 
 #Read in run_accession ids
 with open ("RAids.txt") as f:
@@ -32,7 +34,7 @@ rule quant:
 		#get srrid{sample}
 		srrid=outfile.split("/")[1]
 		#Run Salmon on sra object and delete fastq when finished. 
-		sra.SRA(srrid,directory=DIR).quant(salmon).delete_fastq()
+		sra.SRA(srrid,directory=DIR).trim(trim_galore).quant(salmon).delete_fastq()
 rule merge:
         input:
                 ["{wd}/{sample}/salmon_out/quant.sf".format(wd=DIR,sample=s) for s in ids]
