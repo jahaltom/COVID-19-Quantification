@@ -41,9 +41,10 @@ rule merge:
         output:
                 outfile="{wd}/results_TPM_tx.tsv"
         run:
-                #read in quant file
+                #read in 1st quant file
                 with open(input[0]) as f:
                         thisdata=f.read().splitlines()
+		#Remove header
                 thisdata.pop(0)
                 #Run accession IDs
                 names=[]
@@ -60,7 +61,7 @@ rule merge:
                 dfcount=pd.DataFrame({'TranscriptID':txids})
 
 
-                #current quant file
+                #Loop through all quant files
                 for qf in input:
                         # current RAid
                         name=qf.split('/')[1]
