@@ -39,7 +39,9 @@ rule merge:
         input:
                 ["{wd}/{sample}/salmon_out/quant.sf".format(wd=DIR,sample=s) for s in ra_ids]
         output:
-                outfile="{wd}/results_TPM_tx.tsv"
+                "{wd}/results_TPM_tx.tsv",
+                "{wd}/results_count_tx.tsv"
+                
         run:
                 #read in 1st quant file
                 with open(input[0]) as f:
@@ -74,14 +76,17 @@ rule merge:
                         dftpm[name]=tpm['TPM']
                         dfcount[name]=counts['NumReads']
 
-                ##transcript level TPMs.
+                ##transcript level TPMs and counts.
                 #Read in metadata
                 tx_md=pd.read_csv('Transcript_level_metadata.tsv',sep='\t',skiprows=0)
                 #Fetch transcript ids and TPMs for all RA ids.
-                df_tx=dftpm[['TranscriptID']+names].copy()
+                df_tpm=dftpm[['TranscriptID']+names].copy()
+                df_count=dfcount[['TranscriptID']+names].copy()
                 #Merge with metadata
-                df_tx = tx_md.merge(df_tx, on=['TranscriptID'])
-                df_tx.to_csv(output.outfile,sep='\t',index=False)
+                df_tpm = tx_md.merge(df_tpm, on=['TranscriptID'])
+                df_count = tx_md.merge(df_count, on=['TranscriptID'])
+                df_tpm.to_csv(output[0],sep='\t',index=False)
+                df_count.to_csv(output[1],sep='\t',index=False)
 
 
                 #Read in gene metadata
