@@ -4,4 +4,4 @@ THREADS: 16
 FileType: 'bam'
 #Specify layout: Paired or Single
 Layout: 'Paired'
-Transcriptome: 'Rat_data/RatTranscrptome_decoy.fasta'
+Transcriptome: 'human_data/human_sars_tr_EB_decoy.fasta'
