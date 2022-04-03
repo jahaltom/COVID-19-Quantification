@@ -36,7 +36,7 @@ rule quant:
                 #Pathway for fastq files and salmon output 
                 path=DIR + "/" + wildcards.sample+ "/"
                             
-                if FileType == 'fastq' or FileType = 'fq':
+                if (FileType == 'fastq' or FileType == 'fq'):
                     
                     #fastq file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
@@ -49,7 +49,7 @@ rule quant:
                         #Run Salmon on sra object(fastq files) and delete fastq when finished.
                         sra.SRA(fastq=my_files_path[0],fastq2=my_files_path[1],directory=path).trim(trim_galore).quant(salmon).delete_fastq()                                                               
                         
-                elif FileType == 'bam' and Layout == "Paired":
+                elif (FileType == 'bam' and Layout == "Paired"):
                     #bam file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
                     #Fastq files. 
@@ -64,7 +64,7 @@ rule quant:
                     
                     #Run Salmon on sra object(fastq files) and delete fastq when finished.
                     sra.SRA(fastq=fq1,fastq2=fq2,directory=path).trim(trim_galore).quant(salmon).delete_fastq()
-                elif FileType == 'bam' and Layout == "Single":
+                elif (FileType == 'bam' and Layout == "Single"):
                     #bam file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
                     #Fastq files. 
