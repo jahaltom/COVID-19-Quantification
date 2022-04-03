@@ -29,7 +29,7 @@ out/Sample1/Sample1.fastq
 out/Sample2/Sample2.fastq
 ```
 
-* SingleStudy_Filter.py: This takes output from Bam-Fastq_Quant.py (results_TPM_gene.tsv and results_Count_gene.tsv) and filters it by removing EB genes where the median TPM < 1.  
+* SingleStudy_Filter.py: This takes output from Bam-Fastq_Quant.py (results_TPM_gene.tsv and results_Count_gene.tsv) and filters it by removing EB genes where the median TPM < 1. Same genes removed from TPM file will be removed from counts.  
 
 
 ## Execution
