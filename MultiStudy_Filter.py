@@ -39,16 +39,17 @@ for key in d:
     med_med_eb=tpm.loc[tpm['Gene_type'] == 'EB_novel']['median'].median()
     print(key,"Protein Coding:",med_med_pc,"lincRNA:",med_med_lnc,"Evidence based:",med_med_eb)
     
-    #Remove EB genes where TPM median < 1
-    indexNames = tpm[ (tpm['median'] < 1) & (tpm['Gene_type'] == 'EB_novel') ].index
+    #Remove genes where TPM median < 1
+    indexNames = tpm[ (tpm['median'] < 1)].index
     tpm.drop(indexNames , inplace=True)
+
     
     
 
 
 
-    #Remove EB genes where median TPM is less than that of the med_med_pc
-    indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_pc) ].index
+    #Remove EB genes where median TPM is less than that of the med_med_lnc
+    indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_lnc) ].index
     tpm.drop(indexNames , inplace=True)
     ##Append genes that made it through filter to list
     genes.append(tpm['Gene_stable_ID'])
