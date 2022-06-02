@@ -24,20 +24,22 @@ for key in d:
     count = dfcount[d[key]]
     #Metadata from TPM file. Same as count.
     metadata = dftpm[dftpm.columns[0:20]]
+    
+    #create a median column
+    tpm['median']=tpm.median(axis=1)
+    
     ##Merge metadata with tpm and count
     tpm = pd.concat([metadata, tpm], axis=1)
     count = pd.concat([metadata, count], axis=1)
     if path.exists(key) is not True:
         os.mkdir(key)
     
-    #create a median column
-    tpm['median']=tpm.median(axis=1)
-    
+
     #Remove genes where TPM median < 1
     indexNames = tpm[ (tpm['median'] < 1)].index
     tpm.drop(indexNames , inplace=True)
     
-    #calculate medians of median tpm dist for protein_coding, lncRNA, and EB genes
+    #calculate the median of median tpm dist for protein_coding, lncRNA, and EB genes
     med_med_pc=tpm.loc[tpm['Gene_type'] == 'protein_coding']['median'].median()
     med_med_lnc=tpm.loc[tpm['Gene_type'] == 'lncRNA']['median'].median()
     med_med_eb=tpm.loc[tpm['Gene_type'] == 'EB_novel']['median'].median()
