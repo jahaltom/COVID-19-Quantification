@@ -25,8 +25,13 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
   * ids.txt must contain directory names for individual sample fastq(s). Below would be (Sample1,Sample2) <-one per line in ids.txt. 
   * Bam/Fastq files should be in this structre:
 ```
+#Single-end
 out/Sample1/Sample1.fastq
 out/Sample2/Sample2.fastq
+
+#Paired-end
+out/Sample1/Sample1.r1.fastq
+out/Sample1/Sample1.r2.fastq
 ```
 
 
