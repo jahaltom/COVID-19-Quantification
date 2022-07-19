@@ -5,9 +5,9 @@ from os import path
 
 
 #Import TPM file.
-dftpm = pd.read_csv("NasalAutopsyTPM",sep='\t')
+dftpm = pd.read_csv("results_TPM_gene.tsv",sep='\t')
 #Import count file.
-dfcount = pd.read_csv("NasalAutopsyCount",sep='\t')
+dfcount = pd.read_csv("results_Count_gene.tsv",sep='\t')
 
 #Import a list of samlpe IDs and corrisponding tissue. 
 ra_list = pd.read_csv("List.tsv",sep='\t')
