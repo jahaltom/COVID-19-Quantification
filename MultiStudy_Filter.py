@@ -5,22 +5,22 @@ from os import path
 
 
 #Import TPM file.
-dftpm = pd.read_csv("results_TPM_gene.tsv",sep='\t')
+dftpm = pd.read_csv("NasalAutopsyTPM",sep='\t')
 #Import count file.
-dfcount = pd.read_csv("results_Count_gene.tsv",sep='\t')
+dfcount = pd.read_csv("NasalAutopsyCount",sep='\t')
 
-#Import list of study_accession and run_accession IDs.
+#Import a list of samlpe IDs and corrisponding tissue. 
 ra_list = pd.read_csv("List.tsv",sep='\t')
-##Create dict that has study_accession ID as key.
-d = ra_list.groupby('study_accession')['run_accession'].apply(list).to_dict()
+##Create dict that has tissue as key.
+d = ra_list.groupby('Tissue')['SampleID'].apply(list).to_dict()
 
 ##Will be used to get all genes that pass TPM filter. 
 genes=[]
 
 for key in d:
-    #tpm will be df of all run_accession IDs and their TPM. Each Key is a single study_accession ID.
+    #tpm will be df of all run_accession IDs and their TPM. Each Key is a tissue.
     tpm = dftpm[d[key]]
-    #count will be df of all run_accession IDs and their count. Each Key is a single study_accession ID.
+    #count will be df of all run_accession IDs and their count. Each Key is a tissue. 
     count = dfcount[d[key]]
     #Metadata from TPM file. Same as count.
     metadata = dftpm[dftpm.columns[0:20]]
@@ -31,10 +31,7 @@ for key in d:
     ##Merge metadata with tpm and count
     tpm = pd.concat([metadata, tpm], axis=1)
     count = pd.concat([metadata, count], axis=1)
-    if path.exists(key) is not True:
-        os.mkdir(key)
     
-
     #Remove genes where TPM median < 1
     indexNames = tpm[ (tpm['median'] < 1)].index
     tpm.drop(indexNames , inplace=True)
@@ -45,23 +42,15 @@ for key in d:
     med_med_eb=tpm.loc[tpm['Gene_type'] == 'EB_novel']['median'].median()
     print(key,"Protein Coding:",med_med_pc,"lincRNA:",med_med_lnc,"Evidence based:",med_med_eb)
     
-
     #Remove EB genes where median TPM is less than that of the med_med_lnc
-    indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_lnc) ].index
+    indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_lnc) & (tpm['is54K_EB'] == False)].index
     tpm.drop(indexNames , inplace=True)
     ##Append genes that made it through filter to list
     genes.append(tpm['Gene_stable_ID'])
     
-    #Gather list of Gene_stable_IDs from filtered TPM an use to filter counts. 
-    id_list=tpm['Gene_stable_ID'].tolist()
-    count=count[count['Gene_stable_ID'].isin(id_list)]
-
-    #write to respective study
-    tpm.to_csv(key +'/'+ key + ".TPM.tsv",sep='\t',index=False)
-    count.to_csv(key +'/'+ key + ".Count.tsv",sep='\t',index=False)
     
-    
-##Use genes that passed the TPM filter(genes) to pull from a file that contains TPM and Counts for all studies 
+       
+##Use genes that passed the TPM filter(genes) to pull from a file that contains TPM and Counts for all tissues 
 genes = pd.concat(genes,ignore_index=True)
 genes = genes.drop_duplicates()
 genes = DataFrame(genes)
