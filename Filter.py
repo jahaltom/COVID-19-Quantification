@@ -16,6 +16,8 @@ d = ra_list.groupby('Tissue')['SampleID'].apply(list).to_dict()
 
 ##Will be used to get all genes that pass TPM filter. 
 genes=[]
+##Median info
+med_info=[]
 
 for key in d:
     #tpm will be df of all run_accession IDs and their TPM. Each Key is a tissue.
@@ -40,10 +42,11 @@ for key in d:
     med_med_pc=tpm.loc[tpm['Gene_type'] == 'protein_coding']['median'].median()
     med_med_lnc=tpm.loc[tpm['Gene_type'] == 'lncRNA']['median'].median()
     med_med_eb=tpm.loc[tpm['Gene_type'] == 'EB_novel']['median'].median()
-    print(key,"Protein Coding:",med_med_pc,"lincRNA:",med_med_lnc,"Evidence based:",med_med_eb)
+    info=[key,"Protein Coding:",med_med_pc,"lincRNA:",med_med_lnc,"Evidence based:",med_med_eb]
+    med_info.append(info)
     
-    #Remove EB genes where median TPM is less than that of the med_med_lnc
-    indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_lnc) & (tpm['is54K_EB'] == False)].index
+    #Remove EB genes where median TPM is less than that of the med_med_pc
+    indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_pc) & (tpm['is54K_EB'] == False)].index
     tpm.drop(indexNames , inplace=True)
     ##Append genes that made it through filter to list
     genes.append(tpm['Gene_stable_ID'])
@@ -59,3 +62,6 @@ dftpm = pd.merge(dftpm,genes,on=['Gene_stable_ID'])
 dftpm.to_csv("results_TPM_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
 dfcount = pd.merge(dfcount,genes,on=['Gene_stable_ID'])
 dfcount.to_csv("results_Count_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
+
+med_info=pd.DataFrame(med_info)
+med_info.to_csv("medianInfo.tsv",mode='w', sep='\t',header=None,index=False)
