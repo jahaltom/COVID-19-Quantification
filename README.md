@@ -17,7 +17,7 @@ The salmon tool parameters are specified in the params directory(needed by pyrpi
 ## Snakefiles and filters
 * SRA_Quant.py: This code takes in a single column list of run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts at gene and transcript level. Gene level summed up across transcripts. 
 
-* Filter.py : This takes output from SRA_Quant.py or Bam-Fastq_Quant.py (results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts into groups by an experimental condition of your choosing. Per group, the TPM is then filtered by removing those genes where the median < 1. EB genes are removed where the median TPM is less than that of the median of the medians of all known protein coding genes. The same genes are removed from counts as well. A tab delimited file called "List.tsv" that contans the Condition and SampleID in that order is also needed. This script also outputs a file that contains the TPM for all the genes that passed the TPM filter for any condition and the corresponding counts as well. Outputs median of known protein coding and lincRNA, and EB genes.
+* Filter.py : This takes output from SRA_Quant.py or Bam-Fastq_Quant.py (results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts into groups by an experimental condition of your choosing. Per group, the TPM is then filtered by removing those genes where the median < 1 (except SARS-COV-2 transcripts).  EB genes are removed where the median TPM is less than that of the median of the medians of all known protein coding genes. The same genes are removed from counts as well. A tab delimited file called "List.tsv" that contans the Condition and SampleID in that order is also needed. This script also outputs a file that contains the TPM for all the genes that passed the TPM filter for any condition and the corresponding counts as well. Outputs median of known protein coding and lincRNA, and EB genes. Creates a quantification TSV of genes that made it through filter for each condition. 
  
 * Bam-Fastq_Quant.py: Takes in bam/fastq files and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts at gene and transcript level. Gene level summed up across transcripts. 
 
@@ -40,7 +40,6 @@ out/Sample1/Sample1.r2.fastq
 ```
 snakemake -j 50 -s snakefile --cluster "sbatch -t 01:00:00 -c 25"
 ```
-
 
 
 
