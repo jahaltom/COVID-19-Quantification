@@ -34,8 +34,8 @@ for key in d:
     tpm = pd.concat([metadata, tpm], axis=1)
     count = pd.concat([metadata, count], axis=1)
     
-    #Remove genes where TPM median < 1
-    indexNames = tpm[ (tpm['median'] < 1)].index
+    #Remove genes where TPM median < 1. Except in SARS-COV-2. 
+    indexNames = tpm[ (tpm['median'] < 1) & (tpm['chr'] == 'SARSCOV2_ASM985889v3')].index
     tpm.drop(indexNames , inplace=True)
     
     #calculate the median of medians tpm for protein_coding, lncRNA, and EB genes
@@ -48,9 +48,9 @@ for key in d:
     #Remove EB genes where median TPM is less than that of the med_med_pc
     indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_pc) & (tpm['is54K_EB'] == False)].index
     tpm.drop(indexNames , inplace=True)
-    ##Append genes that made it through filter to list
+    ##Append genes that made it through filter to list and record 
     genes.append(tpm['Gene_stable_ID'])
-    
+    tpm.to_csv(key+"_EB.tsv",mode='w', sep='\t',header=None,index=False)
     
        
 ##Use genes that passed the TPM filter(genes) to pull from a file that contains TPM and Counts for all tissues 
@@ -62,6 +62,5 @@ dftpm = pd.merge(dftpm,genes,on=['Gene_stable_ID'])
 dftpm.to_csv("results_TPM_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
 dfcount = pd.merge(dfcount,genes,on=['Gene_stable_ID'])
 dfcount.to_csv("results_Count_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
-
 med_info=pd.DataFrame(med_info)
 med_info.to_csv("medianInfo.tsv",mode='w', sep='\t',header=None,index=False)
