@@ -52,7 +52,7 @@ for key in d:
     tpm.to_csv(key+"_EB.tsv",mode='w', sep='\t',header=None,index=False)
     
        
-##Use genes that passed the TPM filter(genes) to pull from a file that contains TPM and Counts for all tissues 
+##Use genes that passed the TPM filter(genes) to pull from a file that contains TPM and Counts for all conditions. 
 genes = pd.concat(genes,ignore_index=True)
 genes = genes.drop_duplicates()
 genes = DataFrame(genes)
