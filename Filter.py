@@ -5,7 +5,7 @@ from os import path
 
 
 #Import TPM file.
-dftpm = pd.read_csv("results_TPM_gene.tsv"tsv",sep='\t')
+dftpm = pd.read_csv("results_TPM_gene.tsv",sep='\t')
 #Import count file.
 dfcount = pd.read_csv("results_Count_gene.tsv",sep='\t')
 
