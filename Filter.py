@@ -23,13 +23,13 @@ for key in d:
     #tpm will be df of all run_accession IDs and their TPM. Each Key is a tissue.
     tpm = dftpm[d[key]]
     
-    #Metadata from TPM file. Same as count.
+    #Metadata from TPM file. 
     metadata = dftpm[dftpm.columns[0:20]]
     
-    #create a median column
+    #create a median column.
     tpm['median']=tpm.median(axis=1)
     
-    ##Merge metadata with tpm and count
+    ##Merge metadata with tpm.
     tpm = pd.concat([metadata, tpm], axis=1)
   
     
