@@ -22,8 +22,7 @@ med_info=[]
 for key in d:
     #tpm will be df of all run_accession IDs and their TPM. Each Key is a tissue.
     tpm = dftpm[d[key]]
-    #count will be df of all run_accession IDs and their count. Each Key is a tissue. 
-    count = dfcount[d[key]]
+    
     #Metadata from TPM file. Same as count.
     metadata = dftpm[dftpm.columns[0:20]]
     
@@ -32,7 +31,7 @@ for key in d:
     
     ##Merge metadata with tpm and count
     tpm = pd.concat([metadata, tpm], axis=1)
-    count = pd.concat([metadata, count], axis=1)
+  
     
     #Remove genes where TPM median < 1. Except in SARS-COV-2. 
     indexNames = tpm[ (tpm['median'] < 1) & (tpm['chr'] != 'SARSCOV2_ASM985889v3')].index
