@@ -11,7 +11,7 @@ dfcount = pd.read_csv("results_Count_gene.tsv",sep='\t')
 
 
 #Import list of study_accession and run_accession IDs.
-ra_list = pd.read_csv("List.tsv",sep='\t')
+ra_list = pd.read_csv("Study.tsv",sep='\t')
 ##Create dict that has study_accession ID as key.
 d = ra_list.groupby('study_accession')['run_accession'].apply(list).to_dict()
 
