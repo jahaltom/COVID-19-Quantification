@@ -35,7 +35,7 @@ for key in d:
     count = pd.concat([metadata, count], axis=1)
     
     #Remove genes where TPM median < 1. Except in SARS-COV-2. 
-    indexNames = tpm[ (tpm['median'] < 1) & (tpm['chr'] == 'SARSCOV2_ASM985889v3')].index
+    indexNames = tpm[ (tpm['median'] < 1) & (tpm['chr'] != 'SARSCOV2_ASM985889v3')].index
     tpm.drop(indexNames , inplace=True)
     
     #calculate the median of medians tpm for protein_coding, lncRNA, and EB genes
