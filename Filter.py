@@ -52,13 +52,13 @@ for key in d:
     tpm.to_csv(key+"_EB.tsv",mode='w', sep='\t',index=False)
     
        
-##Use genes that passed the TPM filter(genes) to pull from a file that contains TPM and Counts for all conditions. 
+##Use genes that passed the TPM filter(genes) to pull from a file that contains TPM and Counts for all conditions. Creates median info file. 
 genes = pd.concat(genes,ignore_index=True)
 genes = genes.drop_duplicates()
 genes = DataFrame(genes)
 dftpm = pd.merge(dftpm,genes,on=['Gene_stable_ID'])
-dftpm.to_csv("results_TPM_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
+dftpm.to_csv("results_TPM_gene.filtered.tsv",mode='w', sep='\t',index=False)
 dfcount = pd.merge(dfcount,genes,on=['Gene_stable_ID'])
-dfcount.to_csv("results_Count_gene.filtered.tsv",mode='w', sep='\t',header=True,index=False)
+dfcount.to_csv("results_Count_gene.filtered.tsv",mode='w', sep='\t',index=False)
 med_info=pd.DataFrame(med_info)
 med_info.to_csv("medianInfo.tsv",mode='w', sep='\t',header=None,index=False)
