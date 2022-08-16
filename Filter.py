@@ -24,7 +24,7 @@ for key in d:
     tpm = dftpm[d[key]]
     
     #Metadata from TPM file. 
-    metadata = dftpm[dftpm.columns[0:26]]
+    metadata = dftpm[dftpm.columns[0:29]]
     
     #create a median column.
     tpm['median']=tpm.median(axis=1)
