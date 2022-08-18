@@ -10,12 +10,12 @@ rownames(countData)= countData$Gene_stable_ID
 
 
 #Select only columns that contain counts.
-countData=select(countData,contains("SRR"))
+countData=select(countData,contains("batch"))
 
 #Round to nearest int
 countData=round(countData,0)
 
-##Read in expermental design and gene metadata
+##Read in expermental design and gene metadata. rownames is SampleID.
 metadata = read.table("metadata.tsv",header=TRUE,row.names=1,sep = '\t')
 gene_metadata = read.table("Gene_level_metadata.tsv",header=TRUE,sep = '\t')
 
@@ -34,7 +34,7 @@ countData=countData[,rownames(metadata)]
 
 ##############################EB
 ##Make DEseq2 object
-dds = DESeqDataSetFromMatrix(countData = countData,colData = metadata,design = ~ Condition)
+dds = DESeqDataSetFromMatrix(countData = countData,colData = metadata,design = ~ SequencingBatch + Condition)
 dds = DESeq(dds)
 
 
@@ -53,7 +53,6 @@ for (x in 1:nrow(list)) {
     write.table(result,paste(list[x,1],"vs",list[x,2],".DGE.tsv",sep='_') ,sep = '\t',row.names = FALSE)
 
 }
-
 
 
 
