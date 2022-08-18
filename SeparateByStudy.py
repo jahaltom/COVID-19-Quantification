@@ -21,7 +21,7 @@ for key in d:
     #count will be df of all run_accession IDs and their count. Each Key is a single study_accession ID.
     count = dfcount[d[key]]
     #Metadata from TPM file. Same as count.
-    metadata = dftpm[dftpm.columns[0:20]]
+    metadata = dftpm[dftpm.columns[0:29]]
     
 
     
