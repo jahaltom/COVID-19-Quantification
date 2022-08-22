@@ -39,7 +39,7 @@ dds = DESeq(dds)
 
 
 
-list = read.table("Combo.tsv",sep = '\t')
+list = read.table("Combo.tsv",sep = '\t',quote="")
 
 for (x in 1:nrow(list)) {
     #########
