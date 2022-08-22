@@ -17,7 +17,7 @@ countData=round(countData,0)
 
 ##Read in expermental design and gene metadata. rownames is SampleID.
 metadata = read.table("metadata.tsv",header=TRUE,row.names=1,sep = '\t')
-gene_metadata = read.table("Gene_level_metadata.tsv",header=TRUE,sep = '\t')
+gene_metadata = read.delim("Gene_level_metadata.tsv",header=TRUE,sep = '\t')
 
 
 
