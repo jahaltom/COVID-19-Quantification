@@ -2,7 +2,7 @@ library(DESeq2)
 library(dplyr)
 
 #Read in count information.
-countData = read.table("results_Count_gene.filtered.tsv",header=TRUE,sep = '\t',quote="",check.names=FALSE)
+countData = read.table("results_Count_gene.filtered.tsv",header=TRUE,sep = '\t',quote="",check.names=FALSE,quote="")
 
 #X an Y gene names can be the same. This keeps 1st occurance.
 countData <- countData[!duplicated(countData$Gene_stable_ID),]
@@ -16,7 +16,7 @@ countData=select(countData,contains("batch"))
 countData=round(countData,0)
 
 ##Read in expermental design and gene metadata. rownames is SampleID.
-metadata = read.table("metadata.tsv",header=TRUE,row.names=1,sep = '\t')
+metadata = read.table("metadata.tsv",header=TRUE,row.names=1,sep = '\t',quote="")
 gene_metadata = read.table("Gene_level_metadata.tsv",header=TRUE,sep = '\t',quote="")
 
 
