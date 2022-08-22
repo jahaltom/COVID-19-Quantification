@@ -2,7 +2,7 @@ library(DESeq2)
 library(dplyr)
 
 #Read in count information.
-countData = read.table("results_Count_gene.filtered.tsv",header=TRUE,sep = '\t',quote="",check.names=FALSE,quote="")
+countData = read.table("results_Count_gene.filtered.tsv",header=TRUE,sep = '\t',quote="",check.names=FALSE)
 
 #X an Y gene names can be the same. This keeps 1st occurance.
 countData <- countData[!duplicated(countData$Gene_stable_ID),]
