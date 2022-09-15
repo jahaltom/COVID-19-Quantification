@@ -34,7 +34,7 @@ countData=countData[,rownames(metadata)]
 
 ##############################EB
 ##Make DEseq2 object
-dds = DESeqDataSetFromMatrix(countData = countData,colData = metadata,design = ~ SequencingBatch + Condition)
+dds = DESeqDataSetFromMatrix(countData = countData,colData = metadata,design = Condition)
 dds = DESeq(dds)
 
 
