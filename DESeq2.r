@@ -10,7 +10,7 @@ rownames(countData)= countData$Gene_stable_ID
 
 
 #Select only columns that contain counts.
-countData=select(countData,contains("batch"))
+countData=select(countData,contains("SRR"))
 
 #Round to nearest int
 countData=round(countData,0)
