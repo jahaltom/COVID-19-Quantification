@@ -7,7 +7,7 @@ combos=[]
 #Read in median info.
 median=pd.read_csv('medianInfo.tsv',sep='\t',header=None)  
 #Files that contain the genes that passed each combonation filter. 
-files=glob.glob("*EB*")
+files=glob.glob("*_EB*")
 
 for i in files:
     df=pd.read_csv(i,sep='\t')     
