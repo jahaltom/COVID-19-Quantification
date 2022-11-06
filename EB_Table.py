@@ -12,7 +12,7 @@ files=glob.glob("*EB*")
 for i in files:
     df=pd.read_csv(i,sep='\t')     
     #Combonation, Sample #, Jeff EB Total, Urmi EB Total, Jeff EB Orphan, Urmi EB Orphan. 
-    combos.append([i.replace('_EB.tsv' , ''),(len([col for col in df if col.startswith('SRR')]) or len([col for col in df if col.startswith('ERR')])),df['is54K_EB'].value_counts()[0],df['is54K_EB'].value_counts()[1] ,len(df[(df['ps'] == "27.0") & (df['is54K_EB'] == False)]),len(df[(df['ps'] == "27.0") & (df['is54K_EB'] == True)])])
+    combos.append([i.replace('_EB.tsv' , ''),(len([col for col in df if col.startswith('SRR')]) or len([col for col in df if col.startswith('ERR')])),len(df[(df['Gene_type'] == 'EB_novel') & (df['is54K_EB'] == False)]),df['is54K_EB'].value_counts()[1] ,len(df[(df['ps'] == "27.0") & (df['is54K_EB'] == False) & (df['Gene_type'] == 'EB_novel')]),len(df[(df['ps'] == "27.0") & (df['is54K_EB'] == True)])])
     
 
 combos=DataFrame(combos)
