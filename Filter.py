@@ -12,7 +12,7 @@ dfcount = pd.read_csv("results_Count_gene.tsv",sep='\t')
 #Import metadata with samlpe IDs and corrisponding condition included. 
 md = pd.read_csv("metadata.tsv",sep='\t')
 ##Create dict that has Condition as key.
-d = md.groupby('Condition')['SampleID'].apply(list).to_dict()
+d = md.groupby('Condition1')['SampleID'].apply(list).to_dict()
 
 ##Will be used to get all genes that pass TPM filter. 
 genes=[]
@@ -44,6 +44,7 @@ for key in d:
     info=[key,"Protein Coding:",med_med_pc,"lincRNA:",med_med_lnc,"Evidence based:",med_med_eb]
     med_info.append(info)
     
+
     #Remove EB genes where median TPM is less than that of the med_med_pc
     indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_pc) & (tpm['is54K_EB'] == False)].index
     tpm.drop(indexNames , inplace=True)
@@ -56,9 +57,13 @@ for key in d:
 genes = pd.concat(genes,ignore_index=True)
 genes = genes.drop_duplicates()
 genes = DataFrame(genes)
+#Make it so that only the samples from metadata.tsv are included in the filtered quant output. 
+dftpm=pd.concat([metadata, dftpm[md["SampleID"].tolist()]], axis=1)
+dfcount=pd.concat([metadata, dfcount[md["SampleID"].tolist()]], axis=1)
+
 dftpm = pd.merge(dftpm,genes,on=['Gene_stable_ID'])
 dftpm.to_csv("results_TPM_gene.filtered.tsv",mode='w', sep='\t',index=False)
 dfcount = pd.merge(dfcount,genes,on=['Gene_stable_ID'])
 dfcount.to_csv("results_Count_gene.filtered.tsv",mode='w', sep='\t',index=False)
 med_info=pd.DataFrame(med_info)
-med_info.to_csv("medianInfo.tsv",mode='w', sep='\t',header=None,index=False)
+med_info.to_csv("medianTPMInfo.tsv",mode='w', sep='\t',header=None,index=False)
