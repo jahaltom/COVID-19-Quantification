@@ -12,7 +12,7 @@ dfcount = pd.read_csv("results_Count_gene.tsv",sep='\t')
 #Import metadata with samlpe IDs and corrisponding condition included. 
 md = pd.read_csv("metadata.tsv",sep='\t')
 ##Create dict that has Condition as key.
-d = md.groupby('Condition1')['SampleID'].apply(list).to_dict()
+d = md.groupby('Condition')['SampleID'].apply(list).to_dict()
 
 ##Will be used to get all genes that pass TPM filter. 
 genes=[]
