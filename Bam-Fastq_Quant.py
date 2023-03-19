@@ -46,7 +46,7 @@ rule quant:
                         sra.SRA(fastq=my_files_path[0],directory=path).trim(trim_galore).quant(salmon).delete_fastq()
         
                     elif len(my_files_path) == 2:
-                        #Run Salmon on sra object(fastq files) and delete fastq when finished.
+                        #Run Salmon on sra object(fastq files) and delete fastqs when finished.
                         sra.SRA(fastq=my_files_path[0],fastq2=my_files_path[1],directory=path).trim(trim_galore).quant(salmon).delete_fastq()                                                               
                         
                 elif (FileType == 'bam.gz' and Layout == "Paired"):
@@ -62,7 +62,7 @@ rule quant:
                     param={'-Xmx20g':'','SamToFastq':'','I=': my_files_path[0] ,'F=': fq1,'F2=': fq2}
                     picard.run(**param)
                     
-                    #Run Salmon on sra object(fastq files) and delete fastq when finished.
+                    #Run Salmon on sra object(fastq files) and delete fastqs when finished.
                     sra.SRA(fastq=fq1,fastq2=fq2,directory=path).trim(trim_galore).quant(salmon).delete_fastq()
                 elif (FileType == 'bam' and Layout == "Single"):
                     #bam file paths
