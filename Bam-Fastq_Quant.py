@@ -42,7 +42,7 @@ rule quant:
                     my_files_path = glob.glob(path+'*.'+FileType)
 
                     if len(my_files_path) == 1:
-                        #Run Salmon on sra object(fastq files) and delete fastq when finished.
+                        #Run Salmon on sra object(fastq file) and delete fastq when finished.
                         sra.SRA(fastq=my_files_path[0],directory=path).trim(trim_galore).quant(salmon).delete_fastq()
         
                     elif len(my_files_path) == 2:
