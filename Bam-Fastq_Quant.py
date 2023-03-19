@@ -52,9 +52,9 @@ rule quant:
                 elif (FileType == 'bam.gz' and Layout == "Paired"):
                     #bam file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
-                    #Fastq files. 
+                    #Fastq r1 file name. 
                     fq1=path + wildcards.sample + '1.fastq'
-                    #Fastq files. 
+                    #Fastq r2 file name. 
                     fq2=path + wildcards.sample + '2.fastq'
                                 
                     #Run picard to convert bam to fastq
@@ -67,7 +67,7 @@ rule quant:
                 elif (FileType == 'bam' and Layout == "Single"):
                     #bam file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
-                    #Fastq files. 
+                    #Fastq file name. 
                     fq=path + wildcards.sample + '.fastq'
  
                                 
