@@ -64,7 +64,7 @@ rule quant:
                     
                     #Run Salmon on sra object(fastq files) and delete fastqs when finished.
                     sra.SRA(fastq=fq1,fastq2=fq2,directory=path).trim(trim_galore).quant(salmon).delete_fastq()
-                elif (FileType == 'bam' and Layout == "Single"):
+                elif (FileType == 'bam.gz' and Layout == "Single"):
                     #bam file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
                     #Fastq file name. 
