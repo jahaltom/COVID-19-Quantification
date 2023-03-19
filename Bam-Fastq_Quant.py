@@ -76,7 +76,7 @@ rule quant:
                     param={'-Xmx20g':'','SamToFastq':'','I=': my_files_path[0] ,'F=': fq}
                     picard.run(**param)
                     
-                    #Run Salmon on sra object(fastq files) and delete fastq when finished.
+                    #Run Salmon on sra object(fastq file) and delete fastq when finished.
                     sra.SRA(fastq=fq,directory=path).trim(trim_galore).quant(salmon).delete_fastq()
 
                     
