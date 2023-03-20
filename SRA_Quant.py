@@ -13,7 +13,8 @@ Tr=config['Transcriptome']
 
 
 #creates a trim_galore object.
-trim_galore=qc.Trimgalore(threads=4)
+kwargs={'--fastqc' : ''}
+trim_galore=qc.Trimgalore(threads=4,**kwargs)
 
 #Read in run_accession ids
 with open ("RAids.txt") as f:
