@@ -1,7 +1,7 @@
 DIR: 'out'
 THREADS: 16
-#Specify file type: fastq.gz,fq.gz, or bam.gz
-FileType: 'fastq.gz'
+#Specify file type: fastq,fq, or bam
+FileType: 'fastq'
 #Specify layout: Paired or Single
 Layout: 'Paired'
 Transcriptome: 'human_data/human_sars_tr_EB_decoy.fasta'
