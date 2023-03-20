@@ -15,8 +15,10 @@ FileType=config['FileType']
 Layout=config['Layout']
 Tr=config['Transcriptome']
 
+
 #creates a trim_galore object.
-trim_galore=qc.Trimgalore(threads=4)
+kwargs={'--fastqc' : ''}
+trim_galore=qc.Trimgalore(threads=4,**kwargs)
 
 #Read in run_accession ids#
 with open ("ids.txt") as f:
@@ -33,10 +35,10 @@ rule quant:
                 "{wd}/{sample}/salmon_out/quant.sf"
         run:
             
-                #Pathway for fastq.gz/fq.gz/bam.gz files and salmon output 
+                #Pathway for fastq/fq/bam files and salmon output 
                 path=DIR + "/" + wildcards.sample+ "/"
                             
-                if (FileType == 'fastq.gz' or FileType == 'fq.gz'):
+                if (FileType == 'fastq' or FileType == 'fq'):
                     
                     #fastq file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
@@ -49,7 +51,7 @@ rule quant:
                         #Run Salmon on sra object(fastq files) and delete fastqs when finished.
                         sra.SRA(fastq=my_files_path[0],fastq2=my_files_path[1],directory=path).trim(trim_galore).quant(salmon).delete_fastq()                                                               
                         
-                elif (FileType == 'bam.gz' and Layout == "Paired"):
+                elif (FileType == 'bam' and Layout == "Paired"):
                     #bam file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
                     #Fastq r1 file name. 
@@ -64,7 +66,7 @@ rule quant:
                     
                     #Run Salmon on sra object(fastq files) and delete fastqs when finished.
                     sra.SRA(fastq=fq1,fastq2=fq2,directory=path).trim(trim_galore).quant(salmon).delete_fastq()
-                elif (FileType == 'bam.gz' and Layout == "Single"):
+                elif (FileType == 'bam' and Layout == "Single"):
                     #bam file paths
                     my_files_path = glob.glob(path+'*.'+FileType)
                     #Fastq file name. 
