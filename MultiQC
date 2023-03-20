@@ -1,0 +1,18 @@
+
+mkdir multiqc
+
+cat ids.txt | while read i;do 
+	mv out/$i/*zip* multiqc/; 
+done
+
+
+multiqc multiqc/*
+
+
+mkdir multiqc/salmon
+
+cat ids.txt | while read i;do 
+	cp -r out/$i/*salmon_out* multiqc/salmon/salmon_out$i; 
+done
+
+multiqc -n multiqc_report_rnaseq multiqc/salmon/
