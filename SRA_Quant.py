@@ -42,19 +42,17 @@ rule merge:
         output:
                 "{wd}/results_TPM_tx.tsv",
                 "{wd}/results_count_tx.tsv"
-                
         run:
-                #read in 1st quant file
+                #read in quant file
                 with open(input[0]) as f:
                         thisdata=f.read().splitlines()
-		#Remove header
                 thisdata.pop(0)
                 #Run accession IDs
                 names=[]
                 #Transcript and gene IDs
                 txids=[]
 
-                #Get transcript ids
+                #Get transcript ids ver
                 for l in thisdata:
                     thistx=l.split('\t')[0]
                     if '|' in thistx: thistx=thistx.split('|')[0]
@@ -64,7 +62,7 @@ rule merge:
                 dfcount=pd.DataFrame({'TranscriptID':txids})
 
 
-                #Loop through all quant files
+                #current quant file
                 for qf in input:
                         # current RAid
                         name=qf.split('/')[1]
@@ -80,7 +78,7 @@ rule merge:
                 ##transcript level TPMs and counts.
                 #Read in metadata
                 tx_md=pd.read_csv('Transcript_level_metadata.tsv',sep='\t',skiprows=0)
-                #Fetch transcript ids and TPMs for all RA ids.
+                #Fetch transcript id vers and TPMs for all RA ids.
                 df_tpm=dftpm[['TranscriptID']+names].copy()
                 df_count=dfcount[['TranscriptID']+names].copy()
                 #Merge with metadata
@@ -95,8 +93,8 @@ rule merge:
                 df_gene_tpm=dftpm[['TranscriptID']+names].copy()
                 df_gene_count=dfcount[['TranscriptID']+names].copy()
 
-                #Make df with transcript id and corresponding Gene_stable_ID
-                md2=tx_md[['TranscriptID','Gene_stable_ID']]
+                #Make df with transcript id ver and corresponding Gene_stable_ID ver.
+                md2=tx_md[['TranscriptID','Gene_ID_ver']]
                 ##Merge TPM and count data with ids
                 df_gene_tpm=md2.merge(df_gene_tpm, on=['TranscriptID'], how='right')
                 df_gene_count=md2.merge(df_gene_count, on=['TranscriptID'], how='right')
@@ -105,13 +103,13 @@ rule merge:
                 #Collapse so that each gene id is listed once. sum up corresponding transcript TPM and counts.
                 df_gene_tpm.drop('TranscriptID', axis=1, inplace=True)
                 df_gene_count.drop('TranscriptID', axis=1, inplace=True)
-                df_gene_tpm = df_gene_tpm.groupby(['Gene_stable_ID'],as_index = False).sum()
-                df_gene_count = df_gene_count.groupby(['Gene_stable_ID'],as_index = False).sum()
+                df_gene_tpm = df_gene_tpm.groupby(['Gene_ID_ver'],as_index = False).sum()
+                df_gene_count = df_gene_count.groupby(['Gene_ID_ver'],as_index = False).sum()
 
 
                 ##Merge metadata to counts and TPM
-                df_gene_tpm=md.merge(df_gene_tpm, on=['Gene_stable_ID'], how='right')
-                df_gene_count=md.merge(df_gene_count, on=['Gene_stable_ID'], how='right')
+                df_gene_tpm=md.merge(df_gene_tpm, on=['Gene_ID_ver'], how='right')
+                df_gene_count=md.merge(df_gene_count, on=['Gene_ID_ver'], how='right')
 
                 #reorder so gene name is first.
                 df_gene_tpm = df_gene_tpm[ ['Gene_name'] + [ col for col in df_gene_tpm.columns if col != 'Gene_name' ] ]
