@@ -3,7 +3,7 @@ library(DESeq2)
 
 
 #Make tx2gene file
-txMD = read.table("Transcript_level_metadata.tsv",header=TRUE,sep = '\t')
+txMD = read.table("Transcript_level_metadata.tsv",header=TRUE,sep = '\t',quote="")
 tx2gene=data.frame(txMD$TranscriptID,txMD$Gene_ID_ver)
 
 #List quant.sf files
