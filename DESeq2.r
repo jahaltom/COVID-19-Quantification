@@ -22,11 +22,11 @@ md=md[colnames(txi.salmon$counts),]
 dds <- DESeqDataSetFromTximport(txi.salmon,colData= md, design = ~Condition)
 
 ##Filter DeSeq object
-filteredGeneList = read.table("results_Count_gene.filtered.tsv",header=TRUE,sep = '\t',quote="",check.names=FALSE)
+#filteredGeneList = read.table("results_Count_gene.filtered.tsv",header=TRUE,sep = '\t',quote="",check.names=FALSE)
 #Obtain the indices of only desired genes
-genesTokeep <- which(rownames(dds) %in% filteredGeneList$Gene_ID_ver)
+#genesTokeep <- which(rownames(dds) %in% filteredGeneList$Gene_ID_ver)
 #extract your desired genes in the DESeq object
-dds <- dds[genesTokeep, ]
+#dds <- dds[genesTokeep, ]
 
 ##DESeq2
 
