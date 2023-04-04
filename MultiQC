@@ -1,13 +1,15 @@
 
 mkdir multiqc
 
+#Move fastqc zip files into single directory
 cat ids.txt | while read i;do 
 	mv out/$i/*zip* multiqc/; 
 done
 
-
+#Run MultiQC
 multiqc multiqc/*
 
+#Same for salmon output 
 
 mkdir multiqc/salmon
 
