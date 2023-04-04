@@ -32,7 +32,29 @@ out/Sample1/Sample1.r1.fastq
 out/Sample1/Sample1.r2.fastq
 ```
 
+*MultiQC
+```
 
+mkdir multiqc
+
+#Move fastqc zip files into single directory
+cat ids.txt | while read i;do 
+	mv out/$i/*zip* multiqc/; 
+done
+
+#Run MultiQC
+multiqc multiqc/*
+
+#Same for salmon output 
+
+mkdir multiqc/salmon
+
+cat ids.txt | while read i;do 
+	cp -r out/$i/*salmon_out* multiqc/salmon/salmon_out$i; 
+done
+
+multiqc -n multiqc_report_rnaseq multiqc/salmon/
+```
 * Filter.py: This takes output from SRA_Quant.py or Bam-Fastq_Quant.py (results_TPM_gene.tsv and results_Count_gene.tsv) and separates TPM and counts into groups by an experimental condition of your choosing. Per group, the TPM is then filtered by removing those genes where the median < 1 (except SARS-COV-2 transcripts). EB genes are removed where the median TPM is less than that of the median of the medians of all known protein coding genes. EB genes from Urmis 54K list are excluded/or not from filtering in (See hastag at #Remove EB genes where median TPM is less than that of the med_med_pc). The same genes are removed from counts as well. A tab delimited file called "metadata.tsv" that contains the Condition and SampleID is also needed. This script also outputs a file that contains the TPM for all the genes that passed the TPM filter for any condition and the corresponding counts as well (results_TPM_gene.filtered.tsv results_Count_gene.filtered.tsv). For each condition, outputs the median of the medians of the known protein coding, lincRNA, and EB genes (medianInfo.tsv) and creates a TPM tsv of genes that made it through each condition in the filter *_EB.tsv*. 
  
 
