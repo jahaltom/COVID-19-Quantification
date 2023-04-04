@@ -43,7 +43,7 @@ for key in d:
     tpm.drop(indexNames , inplace=True)
     ##Append genes that made it through filter to list and record 
     genes.append(tpm['Gene_stable_ID'])
-    tpm.to_csv(key+"_EB.tsv",mode='w', sep='\t',index=False)     
+    tpm.to_csv(key+".TPM_EB.tsv",mode='w', sep='\t',index=False)     
 ##Use genes that passed the TPM filter(genes) to pull from a file that contains TPM and Counts for all conditions. Creates median info file. 
 genes = pd.concat(genes,ignore_index=True)
 genes = genes.drop_duplicates()
