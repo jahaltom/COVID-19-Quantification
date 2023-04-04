@@ -14,7 +14,7 @@ This pipeline will take Human RNA-Seq data and concurrently quantify the express
 The salmon tool parameters are specified in the params directory(needed by pyrpipe). To modify the parameters edit salmon_index.yaml. pyrpipe parameters are specified in the pyrpipe_conf.yaml file. config.yaml contains important parameters for the Snakefiles(SRA_Data and Mason_Data) such as thread number for Salmon, path to fasta, output directory name. 
 
 
-## Snakefiles and filters
+## Snakefiles, QC, and filters
 * SRA_Quant.py: This code takes in a single column list of run_accession IDs from the sequencing read archive(place in RAids.txt) and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts at gene and transcript level. Gene level summed up across transcripts. Run FastQC in the default mode on the FastQ file once trimming is complete
 
 * Bam-Fastq_Quant.py: Takes in bam/fastq files and will quantify the expression on Human and SARS-COV-2 transcriptome as well as EB transcripts. Outputs TPM and counts at gene and transcript level. Gene level summed up across transcripts. Run FastQC in the default mode on the FastQ file once trimming is complete
