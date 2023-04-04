@@ -39,6 +39,7 @@ for key in d:
     med_info.append(info)
     #Remove EB genes where median TPM is less than that of the med_med_pc
     indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_pc) & (tpm['is54K_EB'] == False)].index
+    #indexNames = tpm[(tpm['Gene_type'] == 'EB_novel') & (tpm['median'] < med_med_pc)].index
     tpm.drop(indexNames , inplace=True)
     ##Append genes that made it through filter to list and record 
     genes.append(tpm['Gene_stable_ID'])
