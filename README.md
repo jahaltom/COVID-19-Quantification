@@ -32,7 +32,7 @@ out/Sample1/Sample1.r1.fastq
 out/Sample1/Sample1.r2.fastq
 ```
 
-*MultiQC
+* MultiQC
 ```
 mkdir multiqc
 
