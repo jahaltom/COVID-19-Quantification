@@ -11,7 +11,7 @@ This pipeline will take Human RNA-Seq data and concurrently quantify the express
 
 
 ## Parameters
-The salmon tool parameters are specified in the params directory(needed by pyrpipe). To modify the parameters edit salmon_index.yaml. pyrpipe parameters are specified in the pyrpipe_conf.yaml file. config.yaml contains important parameters for the Snakefiles(SRA_Data and Mason_Data) such as thread number for Salmon, path to fasta, output directory name. 
+pyrpipe parameters are specified in the pyrpipe_conf.yaml file. config.yaml contains important parameters for the Snakefiles(Bam-Fastq_Quant.py and SRA_Quant.py ) such as thread number for Salmon, path to fasta/bam, output directory name. 
 
 
 ## Snakefiles, QC, and filters
