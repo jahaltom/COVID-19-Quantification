@@ -75,3 +75,5 @@ Combo.tsv: is a file that is 2 column and tab spaced(Condition1	Condition2). For
 ## PCA
 needs work
 
+* NewEBs.py: Takes in _EB.tsv files from Filter.py for for each Condition(metadata.tsv) that has a sample size >=5 and outputs a list of all covid and non-covid EB genes (nonCovidEBs.txt and covidEBs.txt).
+
