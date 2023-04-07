@@ -17,7 +17,7 @@ kwargs={'--fastqc' : ''}
 trim_galore=qc.Trimgalore(threads=4,**kwargs)
 
 #Read in run_accession ids
-with open ("RAids.txt") as f:
+with open ("ids.txt") as f:
         ra_ids=f.read().splitlines()
 
 #create salmon object. If index is not present it will be created
