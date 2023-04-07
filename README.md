@@ -73,6 +73,7 @@ snakemake -j 50 -s snakefile --cluster "sbatch -t 01:00:00 -c 25"
 * DESeq2.r:
 Takes in Transcript/Gene _level_metadata.tsv, ids.txt, quant.sf files (from snakefiles), metadata.tsv, and Combo.tsv.
 Combo.tsv: is a file that is 2 column and tab spaced(Condition1	Condition2). For each line the constrast is made from left to right (Condition1	vs Condition2).
+Can supply expression matrix (results_Count_gene.filtered.tsv) to filter DeSeq object.
 
 
 ## PCA
