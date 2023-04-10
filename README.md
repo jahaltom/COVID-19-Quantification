@@ -1,6 +1,9 @@
 # COVID-19-Quantification
 This pipeline will take Human RNA-Seq data and concurrently quantify the expression on the Human (GencodeV36) and SARS-COV-2(ASM985889v3) transcriptomes as well as human evidence based (EB) gene treanscripts using pyrpipe https://github.com/urmi-21/pyrpipe.
 
+![alt text](https://github.com/jahaltom/COVID-19-Quantification/blob/main/Flowchart.PNG.jpg?raw=true)
+
+
 ## Prerequisites
 * Run: `conda env create -f env.yaml`
 * Activate the environment: `conda activate pyrpipe_covid`
