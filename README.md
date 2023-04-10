@@ -61,7 +61,7 @@ multiqc -n multiqc_report_rnaseq multiqc/salmon/
 * SeparateByStudy.py: This takes output from SRA_Quant.py (results_TPM_gene.tsv and results_Count_gene.tsv). Subsets expression matrixs into their respective studies. Needs a Study.tsv file that contains study_accession and run_accession IDs.
  
 
-* NewEBs.py: Takes in _EB.tsv files from Filter.py for for each Condition(metadata.tsv) that has a sample size >=5 and outputs a list of all covid and non-covid EB genes (nonCovidEBs.txt and covidEBs.txt). ##Needs work
+* NewEBs.py: Takes in _EB.tsv files from Filter.py for for each Condition(metadata.tsv) that has a sample size >=5 and outputs a list of all covid and non-covid EB genes (Gene_stable_ID) (nonCovidEBs.txt and covidEBs.txt). ##Needs work
 
 
 ## Execution
