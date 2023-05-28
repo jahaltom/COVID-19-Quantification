@@ -4,7 +4,10 @@ library(DESeq2)
 
 #Make tx2gene file
 txMD = read.table("Transcript_level_metadata.tsv",header=TRUE,sep = '\t',quote="")
-tx2gene=data.frame(txMD$TranscriptID,txMD$Gene_ID_ver)
+tx2gene=txMD[,c("TranscriptID","Gene_ID_ver")]
+
+
+
 
 #List quant.sf files
 samples = read.table("ids.txt",header=FALSE,sep = '\t')
@@ -15,7 +18,7 @@ names(files) <- paste0(samples$V1)
 txi.salmon <- tximport(files, type = "salmon", tx2gene = tx2gene)
 
 #Read in metadata
-md = read.table("metadata.tsv",header=TRUE,sep = '\t',row.names=2)
+md = read.table("metadata.tsv",header=TRUE,sep = '\t',row.names=1)
 #Reorder metadata rows to match count data col
 md=md[colnames(txi.salmon$counts),]
 #Make DeSeq object
@@ -29,9 +32,12 @@ dds <- DESeqDataSetFromTximport(txi.salmon,colData= md, design = ~Condition)
 #dds <- dds[genesTokeep, ]
 
 ##DESeq2
-
-
 dds = DESeq(dds)
+
+#Output normalized counts
+normCounts=counts(dds, normalized=TRUE)
+normCounts = cbind(Gene_ID_ver = rownames(normCounts), normCounts)
+write.table(normCounts,"NormalizedCounts.tsv" ,sep = '\t',row.names = FALSE)
 
 gene_metadata = read.table("Gene_level_metadata.tsv",header=TRUE,sep = '\t',quote="")
 
