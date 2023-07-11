@@ -18,7 +18,8 @@ names(files) <- paste0(samples$V1)
 txi.salmon <- tximport(files, type = "salmon", tx2gene = tx2gene)
 
 #Read in metadata
-md = read.table("metadata.tsv",header=TRUE,sep = '\t',row.names=1)
+md = read.table("metadata.tsv",header=TRUE,sep = '\t')
+rownames(md)=md$SampleID
 #Reorder metadata rows to match count data col
 md=md[colnames(txi.salmon$counts),]
 #Make DeSeq object
