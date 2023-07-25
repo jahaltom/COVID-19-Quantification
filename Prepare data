@@ -7,7 +7,8 @@ cd human_data
 
 #download human transcriptome
 wget -q ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_36/gencode.v36.transcripts.fa.gz
-
+#Can reformat fa
+#cat gencode.v36.transcripts.fa  | sed 's/|/ /g' | awk '{print $1}' > whatever
 #download covid seq
 wget -q ftp://ftp.ensemblgenomes.org/pub/viruses/fasta/sars_cov_2/cdna/Sars_cov_2.ASM985889v3.cdna.all.fa.gz
 
