@@ -96,8 +96,8 @@ rule merge:
                 #Make df with transcript id ver and corresponding Gene_stable_ID ver.
                 md2=tx_md[['TranscriptID','Gene_ID_ver']]
                 ##Merge TPM and count data with ids
-                df_gene_tpm=md2.merge(df_gene_tpm, on=['TranscriptID'], how='right')
-                df_gene_count=md2.merge(df_gene_count, on=['TranscriptID'], how='right')
+                df_gene_tpm=md2.merge(df_gene_tpm, on=['TranscriptID'])
+                df_gene_count=md2.merge(df_gene_count, on=['TranscriptID'])
 
 
                 #Collapse so that each gene id is listed once. sum up corresponding transcript TPM and counts.
@@ -108,8 +108,8 @@ rule merge:
 
 
                 ##Merge metadata to counts and TPM
-                df_gene_tpm=md.merge(df_gene_tpm, on=['Gene_ID_ver'], how='right')
-                df_gene_count=md.merge(df_gene_count, on=['Gene_ID_ver'], how='right')
+                df_gene_tpm=md.merge(df_gene_tpm, on=['Gene_ID_ver'])
+                df_gene_count=md.merge(df_gene_count, on=['Gene_ID_ver'])
 
                 #reorder so gene name is first.
                 df_gene_tpm = df_gene_tpm[ ['Gene_name'] + [ col for col in df_gene_tpm.columns if col != 'Gene_name' ] ]
