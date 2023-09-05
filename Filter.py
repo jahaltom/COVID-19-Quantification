@@ -32,7 +32,7 @@ for key in d:
     #Remove tx where TPM median < 1. Except in SARS-COV-2.
     indexNames = tpm[ (tpm['median'] < 1) & (tpm['chr'] != 'SARSCOV2_ASM985889v3')].index
     tpm.drop(indexNames , inplace=True)
-    #calculate the median of medians tpm for protein_coding, lncRNA, and EB tx
+    #calculate the Q75 of medians tpm for protein_coding, lncRNA, and EB tx
     med_med_pc=tpm.loc[tpm['Gene_type'] == 'protein_coding']['median'].quantile(0.75)
     med_med_lnc=tpm.loc[tpm['Gene_type'] == 'lncRNA']['median'].quantile(0.75)
     med_med_eb=tpm.loc[tpm['Gene_type'] == 'EB_novel']['median'].quantile(0.75)
